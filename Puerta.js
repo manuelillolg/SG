@@ -124,10 +124,10 @@ class Puerta extends THREE.Object3D {
       //console.log(this.estoyAnimacion);
     })
     .onStart(function(){
-      console.log("he empezado a abrir");
+      
     })
     .onComplete(function(){
-      console.log("he terminado de abrir");
+  
       objeto.cerrado = false;
       console.log(objeto.cerrado);
     });
