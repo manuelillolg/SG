@@ -85,7 +85,9 @@ class MyScene extends THREE.Scene {
   this.raycaster = new THREE.Raycaster();
   this.mouse = new THREE.Vector2();
 
-   
+   //Movimiento
+   this.teclasMovimiento= [false,false,false,false];
+   this.ratonActivo = false;
   }
   
   initStats() {
@@ -304,6 +306,9 @@ class MyScene extends THREE.Scene {
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
     
+    if(this.ratonActivo){
+      
+    }
     
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
@@ -317,18 +322,22 @@ class MyScene extends THREE.Scene {
     switch(event.key){
         case 'a':
           this.moveDirection.x = 0;
+          this.teclasMovimiento[0] = false;
         break;
 
         case 'w':
           this.moveDirection.z = 0;
+          this.teclasMovimiento[3] = false;
         break;
 
         case 's':
+          this.teclasMovimiento[1] = false;
           this.moveDirection.z = 0;
         break;
 
         case 'd': 
           this.moveDirection.x = 0;
+          this.teclasMovimiento[2] = false;
         break;
 
     }
@@ -344,15 +353,32 @@ class MyScene extends THREE.Scene {
     this.camera.getWorldDirection(direccion);
     direccion.y = 0;
     
-    console.log("Rotacion del personaje: "+rotacionPersonaje);
+    
     //origen del rayo
     var origen = new THREE.Vector3(posicion.x, 1, posicion.z);
     var origen2 = new THREE.Vector3(posicion.x + 10, 1, posicion.z);
     var origen3 = new THREE.Vector3(posicion.x -10, 1, posicion.z);
 
-
     switch(event.key){
-        case 'a':
+      case 'a':
+        this.teclasMovimiento[0] = true;
+      break;
+      case 's':
+        this.teclasMovimiento[1] = true;
+      break;
+      case 'd':
+        this.teclasMovimiento[2] = true;
+
+      break;
+      case 'w':
+     
+        this.teclasMovimiento[3] = true;
+      break;
+    
+    }
+    
+    
+        if(this.teclasMovimiento[0]){
           //var direccion = new THREE.Vector3(-1,0,0);
           //direccion = direccion.rotate(Math.PI/2);
           var originalX  =direccion.x;
@@ -400,8 +426,10 @@ class MyScene extends THREE.Scene {
             this.moveDirection.x = -1;
           else
             this.moveDirection.x = 0;
-        break;
-        case 'w':
+        }
+
+        if(this.teclasMovimiento[3]){
+          
           //var direccion = new THREE.Vector3(0,0,-1);
 
           var  impactados = this.lanzaRayo(rotacionPersonaje,origen,direccion);
@@ -416,9 +444,9 @@ class MyScene extends THREE.Scene {
             this.moveDirection.z = -1;
           else
             this.moveDirection.z = 0;
-        break;
+        }
 
-        case 's':
+        if(this.teclasMovimiento[1]){
           //var direccion = new THREE.Vector3(0,0,1);
           direccion.z  = -direccion.z;
           direccion.x = -direccion.x;
@@ -434,9 +462,9 @@ class MyScene extends THREE.Scene {
           else
             this.moveDirection.z = 0;
 
-        break;
+        }
 
-        case 'd': 
+        if(this.teclasMovimiento[2]){
           //var direccion = new THREE.Vector3(1,0,0);
           var originalX  =direccion.x;
           var originalZ = direccion.z;
@@ -455,8 +483,8 @@ class MyScene extends THREE.Scene {
           else
             this.moveDirection.x = 0;
 
-        break;
-    }
+        }
+    
 
     
   }
@@ -510,7 +538,7 @@ class MyScene extends THREE.Scene {
     var rayo = new THREE.Raycaster();
 
     //direccion.applyMatrix4(matrizRotacion);
-    console.log(direccion);
+ 
     rayo.set(origen, direccion);
 
     var impactados = rayo.intersectObjects(objects,true);
@@ -546,8 +574,9 @@ class MyScene extends THREE.Scene {
 
 
   mueveRaton(event){
-
+        
        if (this.ratonCapturado) {
+        
         var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
         var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
     
@@ -591,12 +620,14 @@ class MyScene extends THREE.Scene {
 
   capturarRaton(){
     this.ratonCapturado = true;
+    this.ratonActivo = true;
     var body = document.body;
     body.requestPointerLock();
   }
 
   liberarRaton(){
     this.ratonCapturado = false;
+    this.ratonActivo = false;
     var doc = document;
     doc.exitPointerLock();
    
@@ -608,14 +639,25 @@ class MyScene extends THREE.Scene {
     this.mouse.y = 0;
     this.raycaster.setFromCamera(this.mouse,this.getCamera());
 
-    
+    var clases = [];
+    clases[0] = this.model.getObjectByName("clase1");
+    clases[1] = this.model.getObjectByName("clase2");
+    clases[2] = this.model.getObjectByName("clase3");
+    clases[3] = this.model.getObjectByName("clase4");
 
+    var pomosClases = [];
+    pomosClases[0] = clases[0].getObjectByName("esferaPomo");
+    pomosClases[1] = clases[1].getObjectByName("esferaPomo");
+    pomosClases[2] = clases[2].getObjectByName("esferaPomo");
+    pomosClases[3] = clases[3].getObjectByName("esferaPomo");
 
-    //console.log(this.banio.children[10]);
+    var banio = this.model.getObjectByName("baño");
+    var pomoBanio = banio.getObjectByName("esferaPomo");
 
-    var pomo = this.model.getObjectByName("esferaPomo");
+    var cuarto = this.model.getObjectByName("cuarto");
+    var pomoCuarto = cuarto.getObjectByName("esferaPomo");
 
-    var pickableObjects = [pomo];
+    var pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto];
 
     var pickedObjects = this.raycaster.intersectObjects(pickableObjects,true);
 
@@ -642,7 +684,7 @@ $(function () {
   window.addEventListener ("resize", () => scene.onWindowResize());
   document.addEventListener("keyup",(event)=>scene.teclaLevantada(event));
   document.addEventListener("keydown",(event)=>scene.teclaPresionada(event));
-  window.addEventListener("mousemove", (event)=>scene.mueveRaton(event));
+  document.addEventListener("mousemove", (event)=>scene.mueveRaton(event));
   //document.addEventListener("click", () => scene.moverPunteroAlCentro());
  
   document.addEventListener('keydown', function(event) {
