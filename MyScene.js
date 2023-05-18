@@ -646,10 +646,8 @@ class MyScene extends THREE.Scene {
     clases[3] = this.model.getObjectByName("clase4");
 
     var pomosClases = [];
-    pomosClases[0] = clases[0].getObjectByName("esferaPomo");
-    pomosClases[1] = clases[1].getObjectByName("esferaPomo");
-    pomosClases[2] = clases[2].getObjectByName("esferaPomo");
-    pomosClases[3] = clases[3].getObjectByName("esferaPomo");
+    for(var i = 0; i < clases.length; i++)
+      pomosClases[i] = clases[i].getObjectByName("esferaPomo");
 
     var banio = this.model.getObjectByName("baño");
     var pomoBanio = banio.getObjectByName("esferaPomo");

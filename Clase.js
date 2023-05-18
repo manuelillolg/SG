@@ -1,4 +1,6 @@
 import * as THREE from '../libs/three.module.js'
+
+import { Puerta } from './Puerta.js';
  
 class Clase extends THREE.Object3D {
   constructor() {
@@ -69,6 +71,16 @@ class Clase extends THREE.Object3D {
       cajaVisible.visible = true;
   
       this.add(cajaVisible);
+
+    //Puerta
+    this.puerta = new Puerta();
+    this.puerta.rotation.y = Math.PI/2;
+
+    this.puertaPosicionada = new THREE.Object3D();
+    this.puertaPosicionada.add(this.puerta);
+    this.puertaPosicionada.rotation.y = Math.PI/2;
+    this.puertaPosicionada.position.set(75+7.5,0,-2.5);
+    this.add(this.puertaPosicionada);
     
   }
 

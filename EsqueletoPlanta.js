@@ -8,9 +8,13 @@ class EsqueletoPlanta extends THREE.Object3D {
     super();
 
     var clase1 = new EsqueletoClase();
+    clase1.name = "clase1";
     var clase2 = new EsqueletoClase();
+    clase2.name = "clase2";
     var clase3 = new EsqueletoClase();
+    clase3.name = "clase3";
     var clase4 = new EsqueletoClase();
+    clase4.name = "clase4";
 
     var loader = new THREE.TextureLoader();
     var marmol = loader.load("./imgs/marmol-blanco.jpg")
@@ -55,11 +59,13 @@ class EsqueletoPlanta extends THREE.Object3D {
 
     //Cuarto
     var cuarto = new EsqueletoCuarto();
+    cuarto.name = "cuarto";
     cuarto.position.set(30,0,30+37.5);
 
 
     //baño
     var baño = new EsqueletoBaño();
+    baño.name = "baño";
     baño.position.set(50+160*2,0,50);
 
     //MuroSalida

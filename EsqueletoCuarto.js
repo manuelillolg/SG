@@ -1,5 +1,7 @@
 import * as THREE from './libs/three.module.js'
 import {CSG} from './libs/CSG-v2.js'
+
+import {Puerta} from './Puerta.js'
  
 class EsqueletoCuarto extends THREE.Object3D {
   constructor(){
@@ -44,12 +46,20 @@ class EsqueletoCuarto extends THREE.Object3D {
 
     var salida = muros.toMesh();
 
-    
-    
-    
-
     this.add(salida);
-    
+
+
+    //Puerta
+    this.puerta = new Puerta();
+    this.puerta.rotation.y = Math.PI/2;
+
+    this.puertaPosicionada = new THREE.Object3D();
+
+    this.puertaPosicionada.add(this.puerta);
+
+    this.puertaPosicionada.rotation.y = Math.PI/2;
+    this.puertaPosicionada.position.set(7.5,0,-27.5);
+    this.add(this.puertaPosicionada);
   }
 }
 
