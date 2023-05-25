@@ -13,13 +13,9 @@ class Proyeccion extends THREE.Object3D {
   }
 
   createCuadro(){
-    var cuadrado = new THREE.Shape();
+    var cuadrado = new THREE.PlaneGeometry(10,10);
 
-    cuadrado.moveTo(  10, 0 );
-    cuadrado.lineTo(10,10);
-    cuadrado.lineTo(0,10);
-    cuadrado.lineTo(0,0);
-    cuadrado.lineTo(10,0);
+    cuadrado.translate(5,5,0);
     
     var loader = new THREE.TextureLoader();
     var diapositiva = loader.load('imgs/diapositiva.jpg');
@@ -27,11 +23,11 @@ class Proyeccion extends THREE.Object3D {
     diapositiva.wrapT = THREE.ClampToEdgeWrapping;
     
     
-    var geometry = new THREE.ShapeGeometry( cuadrado );
+   
     var material = new THREE.MeshBasicMaterial( { color: 0xffffff , map:diapositiva} );
     material.opacity = 0.4;
     material.transparent = true;
-    var mesh = new THREE.Mesh( geometry, material ) ;
+    var mesh = new THREE.Mesh( cuadrado, material ) ;
 
     return mesh;
   }
