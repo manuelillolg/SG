@@ -88,6 +88,9 @@ class MyScene extends THREE.Scene {
    //Movimiento
    this.teclasMovimiento= [false,false,false,false];
    this.ratonActivo = false;
+
+   //Iniciar pickableObjects
+   this.getPickableObjects();
   }
   
   initStats() {
@@ -636,12 +639,7 @@ class MyScene extends THREE.Scene {
    
   }
 
-  pick(event){
-
-    this.mouse.x = 0;
-    this.mouse.y = 0;
-    this.raycaster.setFromCamera(this.mouse,this.getCamera());
-
+  getPickableObjects(){
     var clases = [];
     clases[0] = this.model.getObjectByName("clase1");
     clases[1] = this.model.getObjectByName("clase2");
@@ -661,13 +659,20 @@ class MyScene extends THREE.Scene {
 
     var boton1 = this.model.getObjectByName("Boton1");
     var boton2 = this.model.getObjectByName("Boton2");
-    var proyector = this.model.getObjectByName("Proyector");
-    var diapositiva = this.model.getObjectByName("Diapositiva");
+    var llave2 = this.model.getObjectByName("llave2");
 
-   var pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto,boton1,boton2];
+
+    
+
+    this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto,boton1,boton2,llave2];
+  }
+  pick(event){
    
+    this.mouse.x = 0;
+    this.mouse.y = 0;
+    this.raycaster.setFromCamera(this.mouse,this.getCamera());  
 
-    var pickedObjects = this.raycaster.intersectObjects(pickableObjects,true);
+    var pickedObjects = this.raycaster.intersectObjects(this.pickableObjects,true);
 
     if(pickedObjects.length > 0){
 
@@ -676,16 +681,22 @@ class MyScene extends THREE.Scene {
    
       if(selectedObject.userData.isObject3D){
         if(selectedObject.userData.name == "Boton1"){
+          var proyector = this.model.getObjectByName("Proyector");
+          var diapositiva = this.model.getObjectByName("Diapositiva");
           if(selectedObject.userData.recibeClick(proyector,diapositiva,1)){
-            this.model.muestraLlave();
+            this.model.muestraLlave();           
+          
           }
         }else if(selectedObject.userData.name == "Boton2"  ){
+          var proyector = this.model.getObjectByName("Proyector");
+          var diapositiva = this.model.getObjectByName("Diapositiva");
           if(selectedObject.userData.recibeClick(proyector,diapositiva,2)){
             this.model.muestraLlave();
           }
         }
-        else
+        else{
           selectedObject.userData.recibeClick(selectedObject);
+        }
       }
     }
   }

@@ -46,6 +46,8 @@ class Llave extends THREE.Object3D {
   }
 
   recibeClick(){
+    this.llave.material.opacity = 0.1;
+    this.llave.material.transparent = true;
     
    
   }

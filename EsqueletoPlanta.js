@@ -138,6 +138,12 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.llave.position.x = -150-1-75-20-15-10;
     this.llave.position.z =  -75-5-1-3-30;
     this.llave.position.y = 15;
+    this.llave.name="llave2";
+    console.log(this.llave);
+
+    this.llave.llave.material.transparent = true;
+    this.llave.llave.material.opacity = 0;
+    this.add(this.llave)
     
   }
 
@@ -146,9 +152,9 @@ class EsqueletoPlanta extends THREE.Object3D {
   }
 
   muestraLlave(){
-    if (!this.llave.parent) {
-      this.add(this.llave);
-    }
+    this.llave.llave.material.transparent = false;
+    this.llave.llave.material.opacity = 1;
+
   }
 
   update(){
