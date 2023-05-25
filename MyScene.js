@@ -61,7 +61,7 @@ class MyScene extends THREE.Scene {
 
     //Pruebas del movimiento de la cámara
     this.keyboard = {};
-    this.moveSpeed = 1;
+    this.moveSpeed = 0.5;
     this.moveDirection = new THREE.Vector3();
     this.prevMouseX = 0;
     this.prevMouseY = 0;
@@ -290,9 +290,9 @@ class MyScene extends THREE.Scene {
 
     this.boundingBox = new THREE.Box3().setFromObject(body);
     
-    this.caja = new THREE.Box3Helper(this.boundingBox,0x000000);
+   /* this.caja = new THREE.Box3Helper(this.boundingBox,0x000000);
     this.caja.visible = true;
-    this.personaje.add(this.caja);
+    this.personaje.add(this.caja);*/
     
   }
   update () {
@@ -301,9 +301,9 @@ class MyScene extends THREE.Scene {
     
     // Se actualizan los elementos de la escena para cada frame
     
-
-    // mover el objeto en la dirección del movimiento
-    this.personaje.translateOnAxis(this.moveDirection, this.moveSpeed);
+    if(!this.controlMovimiento())
+      this.personaje.translateOnAxis(this.moveDirection, this.moveSpeed);
+    
 
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
@@ -351,19 +351,19 @@ class MyScene extends THREE.Scene {
 
   teclaPresionada(event) {
 
-    var posicion = new THREE.Vector3();
-    this.personaje.getObjectByName("camara").getWorldPosition(posicion);
-    var rotacionPersonaje = this.personaje.rotation.y;
-    var colisiona = false;
-    var direccion = new THREE.Vector3();
-    this.camera.getWorldDirection(direccion);
-    direccion.y = 0;
+   // var posicion = new THREE.Vector3();
+    //this.personaje.getObjectByName("camara").getWorldPosition(posicion);
+    //var rotacionPersonaje = this.personaje.rotation.y;
+    //var colisiona = false;
+    //var direccion = new THREE.Vector3();
+    //this.camera.getWorldDirection(direccion);
+    //direccion.y = 0;
     
     
     //origen del rayo
-    var origen = new THREE.Vector3(posicion.x, 1, posicion.z);
-    var origen2 = new THREE.Vector3(posicion.x + 10, 1, posicion.z);
-    var origen3 = new THREE.Vector3(posicion.x -10, 1, posicion.z);
+    //var origen = new THREE.Vector3(posicion.x, 1, posicion.z);
+   // var origen2 = new THREE.Vector3(posicion.x + 10, 1, posicion.z);
+   // var origen3 = new THREE.Vector3(posicion.x -10, 1, posicion.z);
 
     switch(event.key){
       case 'a':
@@ -382,145 +382,175 @@ class MyScene extends THREE.Scene {
       break;
     
     }
+         
     
+  }
+
+  controlMovimiento(){
+    // movimiento del objeto:
+    //creamos el moveDirection en funcion de las teclas que haya pulsadas
+    var posicion = new THREE.Vector3();
+    this.personaje.getObjectByName("camara").getWorldPosition(posicion);
+    var origen = new THREE.Vector3(posicion.x, 1, posicion.z);
+    var origenArriba = new THREE.Vector3(posicion.x, 7, posicion.z);
+    var origen2;
+    var origen3;
+    var colisiona;
+    var direccion = new THREE.Vector3();
+    this.camera.getWorldDirection(direccion);
+    direccion.y = 0;
+    var colisionaA = false, colisionaS = false, colisionaD = false, colisionaW = false, colisionaAArriba = false,
+     colisionaSArriba = false, colisionaDArriba = false, colisionaWArriba = false;
+
+
+    //Tecla a
+    if(this.teclasMovimiento[0]){
+
+      //2 Rayos a la izquierda
+      origen2 = new THREE.Vector3(posicion.x, 1, posicion.z-5);
+      origen3 = new THREE.Vector3(posicion.x, 1, posicion.z+5);
+
+      var originalX  =direccion.x;
+      var originalZ = direccion.z;
+  
+      direccion.x = originalZ;
+      direccion.z = -originalX;
+   
+      colisionaA = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
+
+      origen2 = new THREE.Vector3(posicion.x, 7, posicion.z-5);
+      origen3 = new THREE.Vector3(posicion.x, 7, posicion.z+5);
+
+      colisionaAArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
+  
+      if( !colisionaA && !colisionaAArriba)
+        this.moveDirection.x = -1;
+      else
+        this.moveDirection.x = 0;
+    }
+
+
+    //tecla s
+    if(this.teclasMovimiento[1]){
+      //var direccion = new THREE.Vector3(0,0,1);
+      direccion.z  = -direccion.z;
+      direccion.x = -direccion.x;
+
+      //2 Rayos a la izquierda
+      origen2 = new THREE.Vector3(posicion.x-5, 1, posicion.z);
+      origen3 = new THREE.Vector3(posicion.x+5, 1, posicion.z);
+
+      colisionaS = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
+      
+      origen2 = new THREE.Vector3(posicion.x-5, 7, posicion.z);
+      origen3 = new THREE.Vector3(posicion.x+5, 7, posicion.z);
+
+      colisionaSArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
+      
+  
+      if(!colisionaS && !colisionaSArriba)
+        this.moveDirection.z = 1;
+      else
+        this.moveDirection.z = 0;
+  
+    }
+
+    //tecla d
+    if(this.teclasMovimiento[2]){
+      //var direccion = new THREE.Vector3(1,0,0);
+      var originalX  =direccion.x;
+      var originalZ = direccion.z;
+  
+      direccion.x = -originalZ;
+      direccion.z = originalX;
+      
+      //Rayos laterales
+      origen2 = new THREE.Vector3(posicion.x, 1, posicion.z-5);
+      origen3 = new THREE.Vector3(posicion.x, 1, posicion.z+5);
+
+      colisionaD = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
+
+      origen2 = new THREE.Vector3(posicion.x, 7, posicion.z-5);
+      origen3 = new THREE.Vector3(posicion.x, 7, posicion.z+5);
+
+      colisionaDArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
+  
+  
+      if(!colisionaD && !colisionaDArriba)
+        this.moveDirection.x = 1;
+      else
+        this.moveDirection.x = 0;
+  
+    }
+
+    //tecla w
+    if(this.teclasMovimiento[3]){
     
-        if(this.teclasMovimiento[0]){
-          //var direccion = new THREE.Vector3(-1,0,0);
-          //direccion = direccion.rotate(Math.PI/2);
-          var originalX  =direccion.x;
-          var originalZ = direccion.z;
+      //var direccion = new THREE.Vector3(0,0,-1);
 
-          direccion.x = originalZ;
-          direccion.z = -originalX;
-          var caja1 = new THREE.Box3().setFromObject(this.model);
+      //2 rayos extra
+      origen2 = new THREE.Vector3(posicion.x-5, 1, posicion.z);
+      origen3 = new THREE.Vector3(posicion.x+5, 1, posicion.z);
+  
+      colisionaW = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
+      
+      origen2 = new THREE.Vector3(posicion.x-5, 7, posicion.z);
+      origen3 = new THREE.Vector3(posicion.x+5, 7, posicion.z);
+      
+      colisionaWArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
+      
+  
+      if(!colisionaW && !colisionaWArriba)
+        this.moveDirection.z = -1;
+      else
+        this.moveDirection.z = 0;
+    }
 
-          //caja1.applyMatrix4(this.model.matrixWorld);
+    if(colisionaA || colisionaS || colisionaD || colisionaW || colisionaWArriba || colisionaAArriba 
+      || colisionaSArriba || colisionaDArriba )
+      return true;
+    else
+      return false;
+  }
 
+  comprueba3Colisiones(origen,origen2,origen3,direccion){
+    var  impactados = this.lanzaRayo(this.personaje.rotation.y,origen,direccion);
+  
+      if(impactados.length > 0)
+        var colisiona1 = this.checkColisiones(impactados[0]);
+      
+      else
+        var colisiona1 = false;
 
-         // var caja2 = new THREE.Box3().setFromObject(this.model1);
+      var impactados2 = this.lanzaRayo(this.personaje.rotation.y, origen2,direccion);
+      
+      if(impactados2.length > 0 )
+        var colisiona2 = this.checkColisiones(impactados2[0]);
+      else
+        var colisiona2 = false;
 
-          //caja2.applyMatrix4(this.model1.matrixWorld);
-          var impactados = this.lanzaRayo(rotacionPersonaje,origen,direccion);
-          //var impactados2 = this.lanzaRayo(rotacionPersonaje,origen2,direccion);
-         // var impactados3 = this.lanzaRayo(rotacionPersonaje,origen3,direccion);
-          
-          if(impactados.length > 0 )
-            var colisiona1 = this.checkColisiones(impactados[0]);
-          else
-            var colisiona1 = false;
+      var impactados3 = this.lanzaRayo(this.personaje.rotation.y, origen3,direccion);
 
-          /*if(impactados2.length > 0 )
-            var colisiona2 = this.checkColisiones(impactados2[0]);
-          else
-            var colisiona2 = false;
+      if(impactados3.length > 0 )
+        var colisiona3 = this.checkColisiones(impactados3[0]);
+      else
+        var colisiona3 = false;
 
+     
+      if(colisiona1 || colisiona2 || colisiona3)
+        var colisiona = true;
+      else
+        var colisiona = false;
 
-          if(impactados3.length > 0 )
-            var colisiona3 = this.checkColisiones(impactados3[0]);
-          else
-            var colisiona3 = false;
-
-          
-          if(colisiona1 || colisiona2 || colisiona3)
-            colisiona = true;
-          else 
-            colisiona = false;
-          */
-         colisiona = colisiona1;
-
-          if( !colisiona)
-            this.moveDirection.x = -1;
-          else
-            this.moveDirection.x = 0;
-        }
-
-        if(this.teclasMovimiento[3]){
-          
-          //var direccion = new THREE.Vector3(0,0,-1);
-
-          var  impactados = this.lanzaRayo(rotacionPersonaje,origen,direccion);
-
-          if(impactados.length > 0)
-            colisiona = this.checkColisiones(impactados[0]);
-          
-          else
-            colisiona = false;
-
-          if(!colisiona)
-            this.moveDirection.z = -1;
-          else
-            this.moveDirection.z = 0;
-        }
-
-        if(this.teclasMovimiento[1]){
-          //var direccion = new THREE.Vector3(0,0,1);
-          direccion.z  = -direccion.z;
-          direccion.x = -direccion.x;
-          var impactados = this.lanzaRayo(rotacionPersonaje,origen,direccion);
-
-          if(impactados.length > 0)
-            colisiona = this.checkColisiones(impactados[0]);
-          else
-            colisiona = false;
-
-          if(!colisiona)
-            this.moveDirection.z = 1;
-          else
-            this.moveDirection.z = 0;
-
-        }
-
-        if(this.teclasMovimiento[2]){
-          //var direccion = new THREE.Vector3(1,0,0);
-          var originalX  =direccion.x;
-          var originalZ = direccion.z;
-
-          direccion.x = -originalZ;
-          direccion.z = originalX;
-          var impactados = this.lanzaRayo(rotacionPersonaje,origen,direccion);
-
-          if(impactados.length > 0)
-            colisiona = this.checkColisiones(impactados[0]);
-          else
-            colisiona = false;
-
-          if(!colisiona)
-            this.moveDirection.x = 1;
-          else
-            this.moveDirection.x = 0;
-
-        }
-    
-
-    
+      return colisiona;
   }
 
   checkColisiones(candidates) {
     
     if (typeof candidates !== "undefined") {
-     /*// var geometriaCandidates = this.obtenerGeometria(candidates);
-     var className = candidates.constructor.name;
-     //console.log(className);
-     
-      this.collision = false;
-      var cajaBody = this.boundingBox;
-      
-        
-        var candidateBox = candidates.object.geometry.boundingBox;
-       // console.log(candidates.object.name);
 
-        //var cajaH = new THREE.Box3Helper(candidateBox, 0xFF0000);
-        //this.add(cajaH);
-
-        
-
-        if (cajaBody.intersectsBox(candidateBox)) {
-          //console.log("Estás chocando");
-          this.collision = true;
-        }else
-        console.log("no choca");
-        */
-       if(candidates.distance <= 10){
+       if(candidates.distance <= 7){
+       
         return true;
        }
       }
@@ -530,6 +560,7 @@ class MyScene extends THREE.Scene {
 
 
   lanzaRayo(rotacion, origen, direccion){
+
 
     //Objetos de la escena
     var objects = [];
@@ -549,28 +580,6 @@ class MyScene extends THREE.Scene {
 
     var impactados = rayo.intersectObjects(objects,true);
     //var impactados = rayo.intersectObjects(objects,true);
-
-    //Funciones para que se muestre el rayo
-
-    //Codigo para ver el rayo
-    if (this.lineaRayo) {
-      this.remove(this.lineaRayo);
-    }
-
-    
-    var points = [];
-    points.push(rayo.ray.origin);
-    points.push(rayo.ray.origin.clone().add(rayo.ray.direction.clone().multiplyScalar(100)));
-    var rayGeometry = new THREE.BufferGeometry().setFromPoints(points);
-  
-
-    // Crear una nueva línea y agregarla a la escena
-    var rayMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
-    this.lineaRayo = new THREE.Line(rayGeometry, rayMaterial);
-    this.add(this.lineaRayo);
-    //-----------------------------
-
-    //console.log("Distancia al objeto es:  " + impactados[0].distance);
     
 
  
