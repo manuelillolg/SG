@@ -75,7 +75,7 @@ class Puerta extends THREE.Object3D {
 
   recibeClick(){
     
-    if(this.llave.cogida()){
+    if(this.llave==null || this.llave.cogida()){
       if(this.cerrado){
         this.abrir.start();
       }

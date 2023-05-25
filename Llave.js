@@ -9,6 +9,7 @@ class Llave extends THREE.Object3D {
     this.llave = this.createLlave();
     this.llave.userData = this;
     this.llave.rotateX(90*(Math.PI/180));
+    
     this.add(this.llave);
   }
 
@@ -55,6 +56,10 @@ class Llave extends THREE.Object3D {
     this.llave.material.transparent = true;
     this.llave.material.opacity = 0.1;
     this.llave.material.needsUpdate = true;
+  }
+
+  horizontal(){
+    this.llave.rotateX(-90*(Math.PI/180));
   }
 
   update(){

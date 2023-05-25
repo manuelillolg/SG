@@ -62,19 +62,38 @@ class EsqueletoPlanta extends THREE.Object3D {
     muroPasillo.scale.set(160*2,30,5);
     muroPasillo.position.set(-80*2,0,40);
 
+    //Llave2
+    this.llave = new Llave();
+    this.llave.position.x = -150-1-75-20-15-10;
+    this.llave.position.z =  -75-5-1-3-30;
+    this.llave.position.y = 15;
+    this.llave.name="llave2";
+    this.llave.llave.material.transparent = true;
+    this.llave.llave.material.opacity = 0;
+    this.add(this.llave);
+    
+    //Llave1
+    this.llave1 = new Llave();
+    this.llave1.horizontal();
+    this.llave1.position.x = 1+25+150+150+80;
+    this.llave1.position.z = 80;
+    
+     //this.llave1.position.y = 4;
+     //this.llave1.position.z = 2;
+    //this.llave1.position.x = 350;
+    //this.llave1.position.z =  50;
+    this.llave1.name="llave1";
+    this.add(this.llave1);
+
+    
+
     //Cuarto
-    var cuarto = new EsqueletoCuarto();
+    var cuarto = new EsqueletoCuarto(this.llave);
     cuarto.name = "cuarto";
     cuarto.position.set(30,0,30+37.5);
 
 
-    //Llave1
-    this.llave1 = new Llave();
-    this.llave1.position.x = 350;
-    this.llave1.position.z =  50;
-    this.llave1.position.y = 15;
-    this.llave1.name="llave1";
-    this.add(this.llave1);
+    
 
     //baño
     var baño = new EsqueletoBaño(this.llave1);
@@ -103,25 +122,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.name = "planta";
 
 
-    //Boton
-    var materialBoton1 = new THREE.MeshPhongMaterial({color:0xFF0000});
-    this.boton = new Boton(materialBoton1);
-    this.boton.name = "Boton1";
-    this.boton.position.x = -150-1-75-15;
-    this.boton.position.z = -75-5-1-3;
-    this.boton.position.y = 7+1;
-    this.add(this.boton);
-
-    //Boton2
-    var materialBoton2 = new THREE.MeshPhongMaterial({color:0x0000FF});
-    this.boton2 = new Boton(materialBoton2);
-    this.boton2.name="Boton2";
-    this.boton2.position.x = -150-1-75-15+5;
-    this.boton2.position.z = -75-5-1-3;
-    this.boton2.position.y = 7+1;
-
-    this.add(this.boton2);
-
     //Proyector
     this.proyector = new Proyector();
     this.proyector.scale.set(0.5,0.5,-0.5);
@@ -148,17 +148,26 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.add(this.proyeccionFondo);
 
 
-    //Llave2
-    this.llave = new Llave();
-    this.llave.position.x = -150-1-75-20-15-10;
-    this.llave.position.z =  -75-5-1-3-30;
-    this.llave.position.y = 15;
-    this.llave.name="llave2";
- 
+    //Boton
+    var materialBoton1 = new THREE.MeshPhongMaterial({color:0xFF0000});
+    this.boton = new Boton(materialBoton1,this.proyector, this.proyeccion);
+    this.boton.name = "Boton1";
+    this.boton.position.x = -150-1-75-15;
+    this.boton.position.z = -75-5-1-3;
+    this.boton.position.y = 7+1;
+    this.add(this.boton);
 
-    this.llave.llave.material.transparent = true;
-    this.llave.llave.material.opacity = 0;
-    this.add(this.llave);
+    //Boton2
+    var materialBoton2 = new THREE.MeshPhongMaterial({color:0x0000FF});
+    this.boton2 = new Boton(materialBoton2, this.proyector, this.proyeccion);
+    this.boton2.name="Boton2";
+    this.boton2.position.x = -150-1-75-15+5;
+    this.boton2.position.z = -75-5-1-3;
+    this.boton2.position.y = 7+1;
+
+    this.add(this.boton2);
+
+    
   }
 
   getCandidatos(){
@@ -174,9 +183,6 @@ class EsqueletoPlanta extends THREE.Object3D {
   update(){
     if (this.llave.parent) {
       this.llave.update();
-    }
-    if(this.llave1.parent){
-      this.llave1.update();
     }
 
     this.proyector.update();

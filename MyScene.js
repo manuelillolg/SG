@@ -640,6 +640,7 @@ class MyScene extends THREE.Scene {
   }
 
   getPickableObjects(){
+    
     var clases = [];
     clases[0] = this.model.getObjectByName("clase1");
     clases[1] = this.model.getObjectByName("clase2");
@@ -666,6 +667,7 @@ class MyScene extends THREE.Scene {
     
 
     this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto, boton1, boton2, llave2, llave1];
+    
   }
   pick(event){
    
@@ -682,16 +684,14 @@ class MyScene extends THREE.Scene {
    
       if(selectedObject.userData.isObject3D){
         if(selectedObject.userData.name == "Boton1"){
-          var proyector = this.model.getObjectByName("Proyector");
-          var diapositiva = this.model.getObjectByName("Diapositiva");
-          if(selectedObject.userData.recibeClick(proyector,diapositiva,1)){
+       
+          if(selectedObject.userData.recibeClick(1)){
             this.model.muestraLlave();           
           
           }
         }else if(selectedObject.userData.name == "Boton2"  ){
-          var proyector = this.model.getObjectByName("Proyector");
-          var diapositiva = this.model.getObjectByName("Diapositiva");
-          if(selectedObject.userData.recibeClick(proyector,diapositiva,2)){
+        
+          if(selectedObject.userData.recibeClick(2)){
             this.model.muestraLlave();
           }
         }
