@@ -7,6 +7,7 @@ class Llave extends THREE.Object3D {
     super();
 
     this.llave = this.createLlave();
+    this.llave.userData = this;
     this.llave.rotateX(90*(Math.PI/180));
     this.add(this.llave);
   }
