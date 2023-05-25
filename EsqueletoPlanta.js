@@ -145,7 +145,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.llave.position.z =  -75-5-1-3-30;
     this.llave.position.y = 15;
     this.llave.name="llave2";
-    console.log(this.llave);
+ 
 
     this.llave.llave.material.transparent = true;
     this.llave.llave.material.opacity = 0;
