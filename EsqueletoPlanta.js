@@ -21,7 +21,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     clase4.name = "clase4";
 
 
-
     var loader = new THREE.TextureLoader();
     var marmol = loader.load("./imgs/marmol-blanco.jpg")
     marmol.repeat.set(30,30);
@@ -69,10 +68,19 @@ class EsqueletoPlanta extends THREE.Object3D {
     cuarto.position.set(30,0,30+37.5);
 
 
+    //Llave1
+    this.llave1 = new Llave();
+    this.llave1.position.x = 350;
+    this.llave1.position.z =  50;
+    this.llave1.position.y = 15;
+    this.llave1.name="llave1";
+    this.add(this.llave1);
+
     //baño
-    var baño = new EsqueletoBaño();
+    var baño = new EsqueletoBaño(this.llave1);
     baño.name = "baño";
     baño.position.set(50+160*2,0,50);
+    
 
     //MuroSalida
     var muroSalida = new THREE.Mesh(muroG, material);
@@ -139,7 +147,8 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.proyeccionFondo.position.x = -5-150-5-5-150;
     this.add(this.proyeccionFondo);
 
-    //Llave
+
+    //Llave2
     this.llave = new Llave();
     this.llave.position.x = -150-1-75-20-15-10;
     this.llave.position.z =  -75-5-1-3-30;
@@ -149,8 +158,7 @@ class EsqueletoPlanta extends THREE.Object3D {
 
     this.llave.llave.material.transparent = true;
     this.llave.llave.material.opacity = 0;
-    this.add(this.llave)
-    
+    this.add(this.llave);
   }
 
   getCandidatos(){
@@ -166,6 +174,9 @@ class EsqueletoPlanta extends THREE.Object3D {
   update(){
     if (this.llave.parent) {
       this.llave.update();
+    }
+    if(this.llave1.parent){
+      this.llave1.update();
     }
 
     this.proyector.update();

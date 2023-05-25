@@ -5,6 +5,10 @@ class Puerta extends THREE.Object3D {
   constructor() {
     super();
     
+    //Llave asociada
+    this.llave = null;
+
+
     // Se crea la parte de la interfaz que corresponde a la caja
     // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
     //this.createGUI();
@@ -33,6 +37,11 @@ class Puerta extends THREE.Object3D {
     
     this.add(this.puerta);
 
+
+  }
+
+  asociaLlave(llave){
+    this.llave = llave;
   }
 
   crearPomo(){
@@ -66,13 +75,18 @@ class Puerta extends THREE.Object3D {
 
   recibeClick(){
     
-    if(this.cerrado){
-      this.abrir.start();
+    if(this.llave.cogida()){
+      if(this.cerrado){
+        this.abrir.start();
+      }
+      else{
+        this.cerrar.start();
+      }
     }
     else{
-      this.cerrar.start();
+      console.log("No tienes la llave");
     }
-    
+
   }
 
   crearCerrar(){

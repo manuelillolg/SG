@@ -3,12 +3,12 @@ import {CSG} from './libs/CSG-v2.js'
 import {Banio} from './Banio.js'
  
 class EsqueletoBaño extends THREE.Object3D {
-  constructor(){
+  constructor(llaveAsociada){
     super();
     var muroG = new THREE.BoxGeometry(100,30,5);
     muroG.translate(0,15,0);
 
-    this.banio = new Banio();
+    this.banio = new Banio(llaveAsociada);
 
     var material = new THREE.MeshPhongMaterial({color:0xB8B9B8}); 
 

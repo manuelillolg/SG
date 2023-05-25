@@ -8,7 +8,7 @@ import { Water } from './Water.js'
 import { Puerta } from './Puerta.js'
  
 class Banio extends THREE.Object3D {
-  constructor() {
+  constructor(llaveAsociada) {
     super();
     
     // Se crea la parte de la interfaz que corresponde a la caja
@@ -50,6 +50,7 @@ class Banio extends THREE.Object3D {
     this.puerta = new Puerta();
     this.puerta.rotation.y = Math.PI/2;
     this.puerta.position.set(-47.5,0,+7.5);
+    this.puerta.asociaLlave(llaveAsociada);
     this.add(this.puerta);
   }
 

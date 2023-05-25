@@ -5,11 +5,15 @@ import { CSG } from '../libs/CSG-v2.js';
 class Llave extends THREE.Object3D {
   constructor() {
     super();
-
+    this.obtenida = false;
     this.llave = this.createLlave();
     this.llave.userData = this;
     this.llave.rotateX(90*(Math.PI/180));
     this.add(this.llave);
+  }
+
+  cogida(){
+    return this.obtenida;
   }
 
   createLlave(){
@@ -46,10 +50,11 @@ class Llave extends THREE.Object3D {
   }
 
   recibeClick(){
-    this.llave.material.opacity = 0.1;
+    //console.log("Click en llave");
+    this.obtenida = true;
     this.llave.material.transparent = true;
-    
-   
+    this.llave.material.opacity = 0.1;
+    this.llave.material.needsUpdate = true;
   }
 
   update(){
