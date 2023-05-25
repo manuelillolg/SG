@@ -2,6 +2,10 @@ import * as THREE from './libs/three.module.js'
 import { EsqueletoClase } from './EsqueletoClase.js';
 import { EsqueletoCuarto } from './EsqueletoCuarto.js';
 import { EsqueletoBaño } from './EsqueletoBaño.js';
+import {Boton} from './Boton.js';
+import {Proyector} from './Proyector.js';
+import {Proyeccion} from './Proyeccion.js';
+import {Llave} from './Llave.js';
 
 class EsqueletoPlanta extends THREE.Object3D {
   constructor(){
@@ -15,6 +19,8 @@ class EsqueletoPlanta extends THREE.Object3D {
     clase3.name = "clase3";
     var clase4 = new EsqueletoClase();
     clase4.name = "clase4";
+
+
 
     var loader = new THREE.TextureLoader();
     var marmol = loader.load("./imgs/marmol-blanco.jpg")
@@ -87,10 +93,70 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.pickeableObjects = clase1.pickeableObjects;
 
     this.name = "planta";
+
+
+    //Boton
+    var materialBoton1 = new THREE.MeshPhongMaterial({color:0xFF0000});
+    this.boton = new Boton(materialBoton1);
+    this.boton.name = "Boton1";
+    this.boton.position.x = -150-1-75-15;
+    this.boton.position.z = -75-5-1-3;
+    this.boton.position.y = 7+1;
+    this.add(this.boton);
+
+    //Boton2
+    var materialBoton2 = new THREE.MeshPhongMaterial({color:0x0000FF});
+    this.boton2 = new Boton(materialBoton2);
+    this.boton2.name="Boton2";
+    this.boton2.position.x = -150-1-75-15+5;
+    this.boton2.position.z = -75-5-1-3;
+    this.boton2.position.y = 7+1;
+
+    this.add(this.boton2);
+
+    //Proyector
+    this.proyector = new Proyector();
+    this.proyector.scale.set(0.5,0.5,-0.5);
+    this.proyector.position.x = -150-1-75-20-15-10;
+    this.proyector.position.z = -75-5-1-3;
+    this.proyector.position.y  = 7;
+    
+    this.proyector.name ="Proyector";
+    
+    
+    this.add(this.proyector);
+
+    //Proyeccion
+    this.proyeccion = new Proyeccion();
+    this.proyeccion.position.z = -5-150+0.1;
+    this.proyeccion.name ="Diapositiva";
+    this.proyeccion.position.x = -5-150-5-5-150;
+    this.add(this.proyeccion);
+
+    //Llave
+    this.llave = new Llave();
+    this.llave.position.x = -150-1-75-20-15-10;
+    this.llave.position.z =  -75-5-1-3-30;
+    this.llave.position.y = 15;
+    
   }
 
   getCandidatos(){
     return this.candidates;
+  }
+
+  muestraLlave(){
+    if (!this.llave.parent) {
+      this.add(this.llave);
+    }
+  }
+
+  update(){
+    if (this.llave.parent) {
+      this.llave.update();
+    }
+
+    this.proyector.update();
   }
 }
 

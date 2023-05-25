@@ -309,7 +309,10 @@ class MyScene extends THREE.Scene {
     if(this.ratonActivo){
       
     }
+
+    this.model.update();
     
+
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
     // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
@@ -645,6 +648,7 @@ class MyScene extends THREE.Scene {
     clases[2] = this.model.getObjectByName("clase3");
     clases[3] = this.model.getObjectByName("clase4");
 
+
     var pomosClases = [];
     for(var i = 0; i < clases.length; i++)
       pomosClases[i] = clases[i].getObjectByName("esferaPomo");
@@ -655,7 +659,13 @@ class MyScene extends THREE.Scene {
     var cuarto = this.model.getObjectByName("cuarto");
     var pomoCuarto = cuarto.getObjectByName("esferaPomo");
 
-    var pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto];
+    var boton1 = this.model.getObjectByName("Boton1");
+    var boton2 = this.model.getObjectByName("Boton2");
+    var proyector = this.model.getObjectByName("Proyector");
+    var diapositiva = this.model.getObjectByName("Diapositiva");
+
+   var pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto,boton1,boton2];
+   
 
     var pickedObjects = this.raycaster.intersectObjects(pickableObjects,true);
 
@@ -663,8 +673,19 @@ class MyScene extends THREE.Scene {
 
       var selectedObject = pickedObjects[0].object;
 
+   
       if(selectedObject.userData.isObject3D){
-        selectedObject.userData.recibeClick(selectedObject);
+        if(selectedObject.userData.name == "Boton1"){
+          if(selectedObject.userData.recibeClick(proyector,diapositiva,1)){
+            this.model.muestraLlave();
+          }
+        }else if(selectedObject.userData.name == "Boton2"  ){
+          if(selectedObject.userData.recibeClick(proyector,diapositiva,2)){
+            this.model.muestraLlave();
+          }
+        }
+        else
+          selectedObject.userData.recibeClick(selectedObject);
       }
     }
   }
