@@ -64,17 +64,15 @@ class Puerta extends THREE.Object3D {
   
   
 
-  recibeClick(meshConcreto){
+  recibeClick(){
     
-    console.log("he recibido click");
-    console.log(this.cerrado);
-
     if(this.cerrado){
       this.abrir.start();
     }
     else{
       this.cerrar.start();
     }
+    
   }
 
   crearCerrar(){
@@ -87,14 +85,8 @@ class Puerta extends THREE.Object3D {
     .to(destino,2000)
     .onUpdate(function(){
       objeto.rotation.y = origen.angulo;
-      //objeto.position.x = Math.cos(origen.angulo);
-      //console.log(this.estoyAnimacion);
-    })
-    .onStart(function(){
-      console.log("he empezado a cerrar");
     })
     .onComplete(function(){
-      console.log("he terminado de cerrar");
       objeto.cerrado = true;
     });
 
@@ -120,16 +112,9 @@ class Puerta extends THREE.Object3D {
     .to(destino,2000)
     .onUpdate(function(){
       objeto.rotation.y = origen.angulo;
-      //objeto.position.x = Math.cos(origen.angulo);
-      //console.log(this.estoyAnimacion);
-    })
-    .onStart(function(){
-      
     })
     .onComplete(function(){
-  
       objeto.cerrado = false;
-      console.log(objeto.cerrado);
     });
 
     function animate() {

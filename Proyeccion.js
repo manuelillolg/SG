@@ -2,23 +2,23 @@ import * as THREE from '../libs/three.module.js'
 
  
 class Proyeccion extends THREE.Object3D {
-  constructor() {
+  constructor(ruta, medidax, mediday) {
     super();
     this.posicionX = 0;
     this.posicionY = 0;
 
-    this.diapositiva = this.createCuadro();
+    this.diapositiva = this.createCuadro(ruta, medidax, mediday);
     
     this.add(this.diapositiva);
   }
 
-  createCuadro(){
-    var cuadrado = new THREE.PlaneGeometry(10,10);
+  createCuadro(ruta, medidax, mediday){
+    var cuadrado = new THREE.PlaneGeometry(medidax,mediday);
 
-    cuadrado.translate(5,5,0);
+    cuadrado.translate(medidax/2,mediday/2,0);
     
     var loader = new THREE.TextureLoader();
-    var diapositiva = loader.load('imgs/diapositiva.jpg');
+    var diapositiva = loader.load(ruta);
     diapositiva.wrapS = THREE.ClampToEdgeWrapping;
     diapositiva.wrapT = THREE.ClampToEdgeWrapping;
     
