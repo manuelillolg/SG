@@ -127,11 +127,17 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.add(this.proyector);
 
     //Proyeccion
-    this.proyeccion = new Proyeccion();
-    this.proyeccion.position.z = -5-150+0.1;
+    this.proyeccion = new Proyeccion('imgs/diapositiva.jpg', 10, 10);
+    this.proyeccion.position.z = -5-150+0.2;
     this.proyeccion.name ="Diapositiva";
     this.proyeccion.position.x = -5-150-5-5-150;
     this.add(this.proyeccion);
+
+    //Proyeccion fondo
+    this.proyeccionFondo = new Proyeccion('imgs/fondo.jpg', 30, 30);
+    this.proyeccionFondo.position.z = -5-150+0.1;
+    this.proyeccionFondo.position.x = -5-150-5-5-150;
+    this.add(this.proyeccionFondo);
 
     //Llave
     this.llave = new Llave();
