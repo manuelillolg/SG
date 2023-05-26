@@ -76,7 +76,8 @@ class Puerta extends THREE.Object3D {
 
   recibeClick(){
     
-    if(this.llave.cogida()){
+    var mensaje = document.getElementById("mensaje");
+    if(this.llave==null || this.llave.cogida()){
       if(this.cerrado){
         this.abrir.start();
       }
@@ -85,12 +86,18 @@ class Puerta extends THREE.Object3D {
       }
     }
     else{
-      Swal.fire({
-        title: 'No tienes la llave',
-        icon: 'error',
-        confirmButtonText: 'Aceptar'
-      });
+      mensaje.textContent = "No tienes la llave";
+      
+      mensaje.style.display = "block";
+     
     }
+
+    var tiempoEspera = 3000;
+
+    // Programa la ocultación del mensaje después del tiempo especificado
+    setTimeout(function() {
+      mensaje.style.display = "none";
+    }, tiempoEspera);
 
   }
 

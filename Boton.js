@@ -3,10 +3,12 @@ import * as TWEEN from '../libs/tween.esm.js'
 
  
 class Boton extends THREE.Object3D {
-  constructor(material) {
+  constructor(material,proyector,proyeccion) {
     super();
     this.animacion = this.crearAnimacion();
     this.boton = this.createBoton(material);
+    this.proyector = proyector;
+    this.proyeccion = proyeccion;
     this.add(this.boton);
   }
 
@@ -21,15 +23,15 @@ class Boton extends THREE.Object3D {
     return botonMovil;
   }
 
-  recibeClick(proyector,diapositiva,boton){
+  recibeClick(boton){
     var ret;
     this.animacion.start();
     if(boton==1){
-      proyector.rotarY();
-      ret = diapositiva.mueveX();
+      this.proyector.rotarY();
+      ret = this.proyeccion.mueveX();
     }else{
-      proyector.rotarX();
-      ret = diapositiva.mueveY();
+      this.proyector.rotarX();
+      ret = this.proyeccion.mueveY();
     }
     return ret;
   }

@@ -4,7 +4,7 @@ import {CSG} from './libs/CSG-v2.js'
 import {Puerta} from './Puerta.js'
  
 class EsqueletoCuarto extends THREE.Object3D {
-  constructor(){
+  constructor(llave){
     super();
     var muroG = new THREE.BoxGeometry(60,30,5);
     muroG.translate(0,15,0);
@@ -51,6 +51,7 @@ class EsqueletoCuarto extends THREE.Object3D {
 
     //Puerta
     this.puerta = new Puerta();
+    this.puerta.asociaLlave(llave);
     this.puerta.rotation.y = Math.PI/2;
 
     this.puertaPosicionada = new THREE.Object3D();
