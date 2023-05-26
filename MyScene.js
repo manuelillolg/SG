@@ -452,7 +452,7 @@ class MyScene extends THREE.Scene {
       colisionaSArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
       
   
-      if(!colisionaS && !colisionaSArriba)
+      if(!colisionaS && !colisionaSArriba && !this.teclasMovimiento[3])
         this.moveDirection.z = 1;
       else
         this.moveDirection.z = 0;
@@ -480,7 +480,7 @@ class MyScene extends THREE.Scene {
       colisionaDArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
   
   
-      if(!colisionaD && !colisionaDArriba)
+      if(!colisionaD && !colisionaDArriba&& !this.teclasMovimiento[0])
         this.moveDirection.x = 1;
       else
         this.moveDirection.x = 0;
@@ -504,7 +504,7 @@ class MyScene extends THREE.Scene {
       colisionaWArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
       
   
-      if(!colisionaW && !colisionaWArriba)
+      if(!colisionaW && !colisionaWArriba&& !this.teclasMovimiento[1])
         this.moveDirection.z = -1;
       else
         this.moveDirection.z = 0;
