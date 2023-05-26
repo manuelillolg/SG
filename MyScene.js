@@ -94,6 +94,7 @@ class MyScene extends THREE.Scene {
 
    //sonido
    this.createSound();
+   
   
   }
   
@@ -510,11 +511,21 @@ class MyScene extends THREE.Scene {
         this.moveDirection.z = 0;
     }
 
+    if (this.moveDirection.x == 0 && this.moveDirection.y == 0 && this.moveDirection.z ==0){
+      this.pararPasos();
+    }else{
+      this.iniciarPasos();
+    }
+
     if(colisionaA || colisionaS || colisionaD || colisionaW || colisionaWArriba || colisionaAArriba 
-      || colisionaSArriba || colisionaDArriba )
+      || colisionaSArriba || colisionaDArriba ){
       return true;
-    else
+    }else{
       return false;
+    }
+
+
+    
   }
 
   comprueba3Colisiones(origen,origen2,origen3,direccion){
@@ -722,6 +733,7 @@ class MyScene extends THREE.Scene {
 
     this.audioLoader = new THREE.AudioLoader();
     this.tormenta = this.createTormenta(listener);
+    this.pasos = this.createPasos(listener);
   }
 
   createTormenta(listener){
@@ -736,8 +748,31 @@ class MyScene extends THREE.Scene {
     return tormenta;
   }
 
+  createPasos(listener){
+    var pasos = new THREE.Audio(listener);
+    this.audioLoader.load('audio/pasos.mp3',function(buffer){
+      pasos.setBuffer(buffer);
+      pasos.setLoop(true);
+      pasos.setVolume(1);
+    });
+
+    return pasos;
+  }
+
   iniciarTormenta(){
     this.tormenta.play();
+  }
+
+  iniciarPasos(){
+    if(!this.pasos.isPlaying){
+      this.pasos.offset = 0;
+      this.pasos.play();
+    }
+  }
+
+  pararPasos(){
+    if(this.pasos.isPlaying)
+      this.pasos.stop();
   }
 }
 
@@ -759,7 +794,8 @@ $(function () {
   document.addEventListener('keydown', function(event) {
     if (event.keyCode === 13 && !scene.ratonCapturado) { // 13 es el código de la tecla "Enter"
       scene.capturarRaton();
-      scene.iniciarTormenta();
+      if(!scene.tormenta.isPlaying)
+        scene.iniciarTormenta();
     }
     else if(event.keyCode === 13 && scene.ratonCapturado){
       scene.liberarRaton();
