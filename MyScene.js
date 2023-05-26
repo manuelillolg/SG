@@ -392,7 +392,7 @@ class MyScene extends THREE.Scene {
           this.light.intensity = 1;
         
       break;
-      case 'i':
+      case 'h':
         var instrucciones = document.getElementById("h");
         
         if(instrucciones.style.display == "block")
