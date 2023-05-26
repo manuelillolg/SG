@@ -46,7 +46,28 @@
             height: 100px;           
             text-align: center;
             line-height: 90px;
+            border: 2px solid white;
            
+        }
+        .instrucciones {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            background: black;
+            color: white;
+            border: 2px solid white;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            display:none;
+        }
+
+        #infoText {
+            position: fixed;
+            top: 10%;
+            left: 10px;
+            color: white;
         }
     </style>
 </head>
@@ -63,6 +84,19 @@
 <div id="centerDot"></div>
 
 <div id="mensaje"></div>
+
+<div id ="h" class="instrucciones">
+    <p>INSTRUCCIONES</p>
+    <p>a -> izquierda</p>
+    <p>d -> derecha</p>
+    <p>w -> avanza</p>
+    <p>s -> retrocede</p>
+    <p>ENTER -> captura/libera ratón</p>
+    <p>1 -> enciende/apaga linterna</p>
+
+    <p>Pulsa i para cerrar las instrucciones</p>
+</div>
+<div id="infoText">Pulsa "i" para instrucciones</div>
 
 
 </body>

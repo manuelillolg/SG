@@ -195,7 +195,7 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
-    var ambientLight = new THREE.AmbientLight(0x545454, 0.35);
+    var ambientLight = new THREE.AmbientLight(0x545454, 0.2);
     // La añadimos a la escena
     this.add (ambientLight);
     
@@ -203,10 +203,10 @@ class MyScene extends THREE.Scene {
     // La luz focal, además tiene una posición, y un punto de mira
     // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-    var light = new THREE.SpotLight(0xffffff, 1, 100, Math.PI / 4);
-    light.position.set(0, 10, 0);
+    this.light = new THREE.SpotLight(0xffffff, 0, 100, Math.PI / 4);
+    this.light.position.set(0, 10, 0);
     //light.target.position.set(0, 0, 0);
-    light.castShadow = true;
+    this.light.castShadow = true;
 
     this.objetivo = new THREE.Object3D();
     this.objetivo.position.set(0,17,-40);
@@ -217,9 +217,9 @@ class MyScene extends THREE.Scene {
     
     this.personaje.add(this.linterna);
     
-    light.target = this.objetivo;
+    this.light.target = this.objetivo;
     
-    this.personaje.add(light);
+    this.personaje.add(this.light);
   }
   
   setLightIntensity (valor) {
@@ -384,6 +384,22 @@ class MyScene extends THREE.Scene {
       case 'w':
      
         this.teclasMovimiento[3] = true;
+      break;
+      case '1':
+        if(this.light.intensity == 1)
+          this.light.intensity = 0;
+        else
+          this.light.intensity = 1;
+        
+      break;
+      case 'i':
+        var instrucciones = document.getElementById("h");
+        
+        if(instrucciones.style.display == "block")
+          instrucciones.style.display = "none";
+        else{
+          instrucciones.style.display = "block";
+        }
       break;
     
     }
