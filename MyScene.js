@@ -91,6 +91,10 @@ class MyScene extends THREE.Scene {
 
    //Iniciar pickableObjects
    this.getPickableObjects();
+
+   //sonido
+   this.createSound();
+  
   }
   
   initStats() {
@@ -710,6 +714,31 @@ class MyScene extends THREE.Scene {
       }
     }
   }
+
+  //Método para el sonido
+  createSound(){
+    var listener = new THREE.AudioListener();
+    this.camera.add(listener);
+
+    this.audioLoader = new THREE.AudioLoader();
+    this.tormenta = this.createTormenta(listener);
+  }
+
+  createTormenta(listener){
+    var tormenta = new THREE.Audio(listener);
+
+    this.audioLoader.load('audio/tormenta.mp3',function(buffer){
+      tormenta.setBuffer(buffer);
+      tormenta.setLoop(true);
+      tormenta.setVolume(0.5);
+    });
+
+    return tormenta;
+  }
+
+  iniciarTormenta(){
+    this.tormenta.play();
+  }
 }
 
 
@@ -730,6 +759,7 @@ $(function () {
   document.addEventListener('keydown', function(event) {
     if (event.keyCode === 13 && !scene.ratonCapturado) { // 13 es el código de la tecla "Enter"
       scene.capturarRaton();
+      scene.iniciarTormenta();
     }
     else if(event.keyCode === 13 && scene.ratonCapturado){
       scene.liberarRaton();
