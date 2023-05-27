@@ -9,31 +9,63 @@ class EsqueletoClase extends THREE.Object3D {
     muroG.translate(0,15,0);
 
     var loader = new THREE.TextureLoader();
-    var gotele = loader.load("./imgs/pared.jpg")
+    var gotele = loader.load("./imgs/pared.jpg");
     gotele.repeat.set(10,3);
     gotele.wrapS = THREE.RepeatWrapping;
     gotele.wrapT = THREE.RepeatWrapping;
-    var material = new THREE.MeshPhongMaterial({color:0xB8B9B8, map:gotele}); 
 
+    var tex;
+    var goteleLateral = loader.load("./imgs/pared.jpg");
+    var goteleLateralNormal = loader.load("./imgs/paredNormal.jpg");
+    var goteleNormal = loader.load("./imgs/paredNormal.jpg");
+    goteleNormal.repeat.set(2,2);
+    goteleNormal.wrapS = THREE.RepeatWrapping;
+    goteleNormal.wrapT = THREE.RepeatWrapping;
+
+    goteleLateral.repeat.set(0.4,3);
+    goteleLateral.wrapS = THREE.RepeatWrapping;
+    goteleLateral.wrapT = THREE.RepeatWrapping;
+
+    goteleLateralNormal.repeat.set(0.4,3);
+    goteleLateralNormal.wrapS = THREE.RepeatWrapping;
+    goteleLateralNormal.wrapT = THREE.RepeatWrapping;
+
+
+    var material = [
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:goteleLateral, normalMap:goteleLateralNormal}), //frontal
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF }), //trasera
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF }), //superior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF}), //inferior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF ,map:gotele, normalMap:goteleNormal}), //derecha
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:gotele, normalMap:goteleNormal})  //izquierda
+    ];
     var muro1 = new  THREE.Mesh(muroG,material);
 
     //Muro1 se va a dividir en 3 del siguiente modo
     var derecha, izquierda, arriba;
+
+    //materialArriba
+    var materialArriba = this.createTextura("./imgs/pared.jpg", "./imgs/paredNormal.jpg",1,1,3,1 );
+    var materialLateral = this.createTextura("./imgs/pared.jpg", "./imgs/paredNormal.jpg",6,3,0.3,3)
     
     var derechaGeom = new THREE.BoxGeometry(72.5,30,5);
     derechaGeom.translate(0,15,0);
-    derecha = new THREE.Mesh(derechaGeom,material);
+    derecha = new THREE.Mesh(derechaGeom,materialLateral);
 
-    izquierda = new THREE.Mesh(derechaGeom,material);
+    izquierda = new THREE.Mesh(derechaGeom,materialLateral);
     var arribaGeom = new THREE.BoxGeometry(15,8,5);
     arribaGeom.translate(0,4,0);
-    arriba = new THREE.Mesh(arribaGeom,material);
+    arriba = new THREE.Mesh(arribaGeom,materialArriba);
 
 
     var muro2 = new  THREE.Mesh(muroG,material);
+    muro2.scale.x = 0.95;
     muro2.name = "muro derecho";
     var muro3 = new  THREE.Mesh(muroG,material);
+    muro3.scale.x = 0.95;
     var muro4 = new  THREE.Mesh(muroG,material);
+    muro4.scale.x = 0.95;
+
 
     //Colocamos los muros 
     izquierda.position.z +=77.5;
@@ -59,22 +91,7 @@ class EsqueletoClase extends THREE.Object3D {
     muro4.position.z-=77.5;
 
     var muros = new CSG();
-    muros.union([muro1,muro2,muro3,muro4]);
-
-    //Quitamos la puerta
-
-    var puertaGeom = new THREE.BoxGeometry(15,22,5);
-    puertaGeom.translate(0,11,2.5);
-    var puerta = new THREE.Mesh(puertaGeom, material);
-
-    puerta.position.set(0,0,75);
-
-    muros.subtract([puerta]);
-
-
-    var salida = muros.toMesh();
-
-    
+    muros.union([muro1,muro2,muro3,muro4]);    
     
     var clase = new Clase();
     clase.position.set(-75,0,-75);
@@ -83,9 +100,7 @@ class EsqueletoClase extends THREE.Object3D {
     claseOrientada.add(clase);
     claseOrientada.rotateY(180*(Math.PI/180));
 
-    this.add(salida,claseOrientada);
-
-    salida.name = "salida";
+    this.add(muro2,muro3,muro4,izquierda,derecha,arriba,claseOrientada);
 
     //control de colisiones
     var caja = new THREE.Box3();
@@ -105,36 +120,49 @@ class EsqueletoClase extends THREE.Object3D {
     var caja6 = new THREE.Box3();
     caja6.setFromObject(muro4);
 
-    var cajaVisible = new THREE.Box3Helper(caja, 0xFFFF00);
-    var cajaVisible2 = new THREE.Box3Helper(caja2, 0xFFFF00);
-    var cajaVisible3 = new THREE.Box3Helper(caja3, 0xFFFF00);
-    var cajaVisible4 = new THREE.Box3Helper(caja4, 0xFF0000);
-    var cajaVisible5 = new THREE.Box3Helper(caja5, 0xFFFF00);
-    var cajaVisible6 = new THREE.Box3Helper(caja6, 0xFFFF00);
-    
-    muro2.boundingBox = caja4;
-
-    cajaVisible.visible = true;
-    cajaVisible2.visible = true;
-    cajaVisible3.visible = true;
-    this.add(cajaVisible, cajaVisible2, cajaVisible3, cajaVisible4,cajaVisible5,cajaVisible6);
-    
-    this.candidates = [];
-    this.candidates.push(caja);
-    this.candidates.push(caja2);
-    this.candidates.push(caja3);
-    this.candidates.push(caja4);
-    this.candidates.push(caja5);
-    this.candidates.push(caja6);
-    this.pickeableObjects = [derecha,izquierda,arriba,muro2,muro3,muro4];
 
     this.name = "clase";
     
   }
 
-  getCandidatos(){
-    return this.candidates;
+  createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){
+    var loader = new THREE.TextureLoader();
+    var normal = loader.load(imagenNormal);
+    var plana =loader.load(imagen);
+    var lateralN = loader.load(imagenNormal);
+    var lateralP =loader.load(imagen);
+    
+
+    normal.repeat.set(x,y);
+    normal.wrapS = THREE.RepeatWrapping;
+    normal.wrapT = THREE.RepeatWrapping;
+
+    plana.repeat.set(x,y);
+    plana.wrapS = THREE.RepeatWrapping;
+    plana.wrapT = THREE.RepeatWrapping;
+
+    lateralN.repeat.set(xLateral,yLateral);
+    lateralN.wrapS = THREE.RepeatWrapping;
+    lateralN.wrapT = THREE.RepeatWrapping;
+
+    lateralP.repeat.set(xLateral,yLateral);
+    lateralP.wrapS = THREE.RepeatWrapping;
+    lateralP.wrapT = THREE.RepeatWrapping;
+
+    var material = [
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:lateralP, normalMap:lateralN}), //frontal
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF ,map:lateralP, normalMap:lateralN}), //trasera
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:lateralP, normalMap:lateralN }), //superior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:lateralP, normalMap:lateralN}), //inferior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF ,map:plana, normalMap:normal}), //derecha
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:plana, normalMap:normal})  //izquierda
+    ];
+
+    return material;
+
+
   }
+
 }
 
 export { EsqueletoClase };

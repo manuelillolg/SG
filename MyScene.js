@@ -45,8 +45,8 @@ class MyScene extends THREE.Scene {
     this.createBody();
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-    this.axis = new THREE.AxesHelper (5);
-    this.add (this.axis);
+    //this.axis = new THREE.AxesHelper (5);
+    //this.add (this.axis);
     
     this.personaje.position.z = +40;
     this.personaje.position.x = 370;
@@ -195,9 +195,9 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
-    var ambientLight = new THREE.AmbientLight(0x545454, 0.2);
+    this.ambientLight = new THREE.AmbientLight(0x545454, 0.1);
     // La añadimos a la escena
-    this.add (ambientLight);
+    this.add (this.ambientLight);
     
     // Se crea una luz focal que va a ser la luz principal de la escena
     // La luz focal, además tiene una posición, y un punto de mira
@@ -223,7 +223,7 @@ class MyScene extends THREE.Scene {
   }
   
   setLightIntensity (valor) {
-    this.spotLight.intensity = valor;
+    this.ambientLight.intensity = valor;
   }
   
   setAxisVisible (valor) {
@@ -672,6 +672,8 @@ class MyScene extends THREE.Scene {
 
     var banio = this.model.getObjectByName("baño");
     var pomoBanio = banio.getObjectByName("esferaPomo");
+    var pomoSalida = this.model.getObjectByName("esferaPomo");
+
 
     var cuarto = this.model.getObjectByName("cuarto");
     var pomoCuarto = cuarto.getObjectByName("esferaPomo");
@@ -684,7 +686,7 @@ class MyScene extends THREE.Scene {
 
     
 
-    this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3], pomoCuarto, boton1, boton2, llave2, llave1];
+    this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3],pomoSalida, pomoCuarto, boton1, boton2, llave2, llave1];
     
   }
   pick(event){

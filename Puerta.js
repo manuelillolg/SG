@@ -34,6 +34,7 @@ class Puerta extends THREE.Object3D {
 
 
     this.puerta.add(this.pomo);
+    this.puerta.scale.z = 0.3;
     
     this.add(this.puerta);
 

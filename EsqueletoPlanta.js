@@ -6,6 +6,7 @@ import {Boton} from './Boton.js';
 import {Proyector} from './Proyector.js';
 import {Proyeccion} from './Proyeccion.js';
 import {Llave} from './Llave.js';
+import {Puerta} from './Puerta.js';
 
 class EsqueletoPlanta extends THREE.Object3D {
   constructor(){
@@ -44,9 +45,10 @@ class EsqueletoPlanta extends THREE.Object3D {
     var muroG = new THREE.BoxGeometry(1,1,1);
     muroG.translate(0,0.5,0);
 
-    var material = new THREE.MeshPhongMaterial({color:0xB8B9B8}); 
+    
 
-    var muroFin = new THREE.Mesh(muroG,material);
+    var materialFin = this.createTextura("./imgs/pared.jpg","./imgs/paredNormal.jpg",2,3,1,1);
+    var muroFin = new THREE.Mesh(muroG,materialFin);
 
     muroFin.scale.x = 40;
     muroFin.scale.z = 5;
@@ -57,7 +59,9 @@ class EsqueletoPlanta extends THREE.Object3D {
     muroFin.position.z = 20;
 
     //Muro Pasillo
-    var muroPasillo = new THREE.Mesh(muroG,material);
+    var materialPasillo= this.createTextura("./imgs/pared.jpg","./imgs/paredNormal.jpg",20,3,1,1)
+    var muroPasillo = new THREE.Mesh(muroG,materialPasillo);
+
 
     muroPasillo.scale.set(160*2,30,5);
     muroPasillo.position.set(-80*2,0,40);
@@ -101,10 +105,41 @@ class EsqueletoPlanta extends THREE.Object3D {
     baño.position.set(50+160*2,0,50);
     
 
-    //MuroSalida
-    var muroSalida = new THREE.Mesh(muroG, material);
-    muroSalida.scale.set(260,30,5);
-    muroSalida.position.set(130+60,0,40+55);
+    
+
+    //MuroSalidaDerecha
+    var muroSalidaG = new THREE.BoxGeometry(122.5,30,5);
+    var muroSalidaM = this.createTextura("./imgs/pared.jpg","./imgs/paredNormal.jpg",10,3,0.4,3);
+    var muroSalidaDerecha = new THREE.Mesh(muroSalidaG,muroSalidaM);
+    muroSalidaDerecha.position.set(122.5/2+60,15,2.5+40+5+50);
+    this.add(muroSalidaDerecha);
+
+     //MuroSalidIzquierda
+     var muroSalidaIzquierda = new THREE.Mesh(muroSalidaG,muroSalidaM);
+     muroSalidaIzquierda.position.set((122.5/2)+122.5+60+15,15,2.5+40+5+50);
+     this.add(muroSalidaIzquierda);
+
+     //MuroSalidaArriba
+     var muroArribaG = new THREE.BoxGeometry(15,8,5);
+     muroArribaG.translate(7.5+60+122.5,4+22,-2.5+40+60);
+     var muroArribaM = this.createTextura("./imgs/pared.jpg", "./imgs/paredNormal.jpg",1,1,3,1 );
+     var arriba = new THREE.Mesh(muroArribaG,muroArribaM);
+     this.add(arriba);
+
+
+     //Puerta de salida
+    this.puertaSalida = new Puerta();
+    this.puertaSalida.rotation.y = Math.PI/2;
+
+    this.puertaPosicionada = new THREE.Object3D();
+
+    this.puertaPosicionada.add(this.puertaSalida);
+
+    this.puertaPosicionada.rotation.y = Math.PI/2;
+    this.puertaPosicionada.position.set(15+60+122.5,0,-1.5+40+60);
+    this.add(this.puertaPosicionada);
+
+     
 
 
     //Suelo
@@ -113,7 +148,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     sueloG.translate(0,-1,0);
     var suelo = new THREE.Mesh(sueloG,color);
 
-    this.add(clase1, clase2, clase3, clase4, muroFin, muroPasillo,cuarto,baño,muroSalida, suelo);
+    this.add(clase1, clase2, clase3, clase4, muroFin, muroPasillo,cuarto,baño, suelo);
 
     //Candidatos de colisiones
     this.candidates = clase1.candidates;
@@ -167,6 +202,8 @@ class EsqueletoPlanta extends THREE.Object3D {
 
     this.add(this.boton2);
 
+    this.createTecho();
+
     
   }
 
@@ -186,6 +223,63 @@ class EsqueletoPlanta extends THREE.Object3D {
     }
 
     this.proyector.update();
+  }
+
+  createTecho(){
+    var loader = new THREE.TextureLoader();
+    var gotele = loader.load("./imgs/pared.jpg");
+    gotele.repeat.set(90,80);
+    gotele.wrapS = THREE.RepeatWrapping;
+    gotele.wrapT = THREE.RepeatWrapping;
+    var goteleNormal = loader.load("./imgs/paredNormal.jpg");
+    goteleNormal.repeat.set(90,80);
+    goteleNormal.wrapS = THREE.RepeatWrapping;
+    goteleNormal.wrapT = THREE.RepeatWrapping;
+
+    var techoGeom = new THREE.BoxGeometry(900,2,800);
+    var color = new THREE.MeshPhongMaterial({color: 0xFFFFFF, map:gotele, normalMap: goteleNormal});  
+    
+    techoGeom.translate(0,1,0);
+    var techo = new THREE.Mesh(techoGeom,color);
+    techo.position.y += 30;
+    this.add(techo);
+  }
+  createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){
+    var loader = new THREE.TextureLoader();
+    var normal = loader.load(imagenNormal);
+    var plana =loader.load(imagen);
+    var lateralN = loader.load(imagenNormal);
+    var lateralP =loader.load(imagen);
+    
+
+    normal.repeat.set(x,y);
+    normal.wrapS = THREE.RepeatWrapping;
+    normal.wrapT = THREE.RepeatWrapping;
+
+    plana.repeat.set(x,y);
+    plana.wrapS = THREE.RepeatWrapping;
+    plana.wrapT = THREE.RepeatWrapping;
+
+    lateralN.repeat.set(xLateral,yLateral);
+    lateralN.wrapS = THREE.RepeatWrapping;
+    lateralN.wrapT = THREE.RepeatWrapping;
+
+    lateralP.repeat.set(xLateral,yLateral);
+    lateralP.wrapS = THREE.RepeatWrapping;
+    lateralP.wrapT = THREE.RepeatWrapping;
+
+    var material = [
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:lateralP, normalMap:lateralN}), //frontal
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF ,map:lateralP, normalMap:lateralN}), //trasera
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:lateralP, normalMap:lateralN }), //superior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:lateralP, normalMap:lateralN}), //inferior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF ,map:plana, normalMap:normal}), //derecha
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:plana, normalMap:normal})  //izquierda
+    ];
+
+    return material;
+
+
   }
 }
 
