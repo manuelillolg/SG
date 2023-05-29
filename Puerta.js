@@ -1,6 +1,5 @@
 import * as THREE from '../libs/three.module.js'
 import * as TWEEN from '../libs/tween.esm.js'
-import Swal from '../libs/sweetalert2/src/sweetalert2.js';
  
 class Puerta extends THREE.Object3D {
   constructor() {
