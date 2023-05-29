@@ -14,12 +14,6 @@ class Clase extends THREE.Object3D {
       this.add(mesa);
       var caja = new THREE.Box3();
       caja.setFromObject(mesa);
-  
-      var cajaVisible = new THREE.Box3Helper(caja, 0xFFFF00);
-  
-      cajaVisible.visible = true;
-  
-      this.add(cajaVisible);
     }
 
     //Mesas centrales
@@ -30,13 +24,8 @@ class Clase extends THREE.Object3D {
       this.add(mesa);
 
       var caja = new THREE.Box3();
-      caja.setFromObject(mesa);
-  
-      var cajaVisible = new THREE.Box3Helper(caja, 0xFFFF00);
-  
-      cajaVisible.visible = true;
-  
-      this.add(cajaVisible);
+      caja.setFromObject(mesa);     
+ 
     }
 
     //Mesas de la parte derecha
@@ -46,12 +35,7 @@ class Clase extends THREE.Object3D {
       this.add(mesa);
       var caja = new THREE.Box3();
       caja.setFromObject(mesa);
-  
-      var cajaVisible = new THREE.Box3Helper(caja, 0xFFFF00);
-  
-      cajaVisible.visible = true;
-  
-      this.add(cajaVisible);
+
     }
 
     //Pizarra
@@ -66,11 +50,6 @@ class Clase extends THREE.Object3D {
     var caja = new THREE.Box3();
       caja.setFromObject(pizarra);
   
-      var cajaVisible = new THREE.Box3Helper(caja, 0xFFFF00);
-  
-      cajaVisible.visible = true;
-  
-      this.add(cajaVisible);
 
     //Puerta
     this.puerta = new Puerta();

@@ -92,10 +92,42 @@ class Banio extends THREE.Object3D {
 
   crearCuartoSeparador(){
     //Crear cuarto pequeño
+    var loader = new THREE.TextureLoader();
+    var gotele = loader.load("./imgs/pared.jpg");
+    gotele.repeat.set(3,3);
+    gotele.wrapS = THREE.RepeatWrapping;
+    gotele.wrapT = THREE.RepeatWrapping;
 
+    var goteleLateral = loader.load("./imgs/pared.jpg");
+    var goteleLateralNormal = loader.load("./imgs/paredNormal.jpg");
+    var goteleNormal = loader.load("./imgs/paredNormal.jpg");
+    goteleNormal.repeat.set(2,2);
+    goteleNormal.wrapS = THREE.RepeatWrapping;
+    goteleNormal.wrapT = THREE.RepeatWrapping;
+
+    goteleLateral.repeat.set(0.4,3);
+    goteleLateral.wrapS = THREE.RepeatWrapping;
+    goteleLateral.wrapT = THREE.RepeatWrapping;
+
+    goteleLateralNormal.repeat.set(0.4,3);
+    goteleLateralNormal.wrapS = THREE.RepeatWrapping;
+    goteleLateralNormal.wrapT = THREE.RepeatWrapping;
+
+
+    //reamos los materiales para las distintas caras
+    var materials = [
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:goteleLateral, normalMap:goteleLateralNormal}), //frontal
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF }), //trasera
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF }), //superior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF}), //inferior
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF ,map:gotele, normalMap:goteleNormal}), //derecha
+      new THREE.MeshPhongMaterial({ color:0xFFFFFF,map:gotele, normalMap:goteleNormal})  //izquierda
+    ];
+
+    
     var boxgeo = new THREE.BoxGeometry(40,30,5);
-    var boxmat = new THREE.MeshPhongMaterial({color:0xB8B9B8});
-    var separador = new THREE.Mesh(boxgeo,boxmat);
+    
+    var separador = new THREE.Mesh(boxgeo,materials);
 
     separador.rotation.y = Math.PI/2;
     separador.position.set(15,15,25);
