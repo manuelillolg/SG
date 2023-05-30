@@ -6,6 +6,7 @@ import { Box } from './Box.js'
 import { Lavamanos } from './Lavamanos.js'
 import { Water } from './Water.js'
 import { Puerta } from './Puerta.js'
+import { Box3 } from './libs/three.module.js'
  
 class Banio extends THREE.Object3D {
   constructor(llaveAsociada) {

@@ -94,6 +94,8 @@ class MyScene extends THREE.Scene {
 
    //sonido
    this.createSound();
+
+   this.chocables = this.objetosChocables();
    
   
   }
@@ -195,7 +197,7 @@ class MyScene extends THREE.Scene {
     // La luz ambiental solo tiene un color y una intensidad
     // Se declara como   var   y va a ser una variable local a este método
     //    se hace así puesto que no va a ser accedida desde otros métodos
-    this.ambientLight = new THREE.AmbientLight(0x545454, 0.1);
+    this.ambientLight = new THREE.AmbientLight(0x545454, 0.20);
     // La añadimos a la escena
     this.add (this.ambientLight);
     
@@ -427,18 +429,24 @@ class MyScene extends THREE.Scene {
     //Tecla a
     if(this.teclasMovimiento[0]){
 
+      //2 Rayos a la izquierda
+      origen2 = new THREE.Vector3(posicion.x, 1, posicion.z-5);
+      origen3 = new THREE.Vector3(posicion.x, 1, posicion.z+5);
+
       var originalX  =direccion.x;
       var originalZ = direccion.z;
   
       direccion.x = originalZ;
       direccion.z = -originalX;
+   
+      colisionaA = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
 
       origen2 = new THREE.Vector3(posicion.x, 7, posicion.z-5);
       origen3 = new THREE.Vector3(posicion.x, 7, posicion.z+5);
 
       colisionaAArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
   
-      if( !colisionaAArriba)
+      if( !colisionaA && !colisionaAArriba)
         this.moveDirection.x = -1;
       else
         this.moveDirection.x = 0;
@@ -450,6 +458,12 @@ class MyScene extends THREE.Scene {
       //var direccion = new THREE.Vector3(0,0,1);
       direccion.z  = -direccion.z;
       direccion.x = -direccion.x;
+
+      //2 Rayos a la izquierda
+      origen2 = new THREE.Vector3(posicion.x-5, 1, posicion.z);
+      origen3 = new THREE.Vector3(posicion.x+5, 1, posicion.z);
+
+      colisionaS = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
       
       origen2 = new THREE.Vector3(posicion.x-5, 7, posicion.z);
       origen3 = new THREE.Vector3(posicion.x+5, 7, posicion.z);
@@ -457,7 +471,7 @@ class MyScene extends THREE.Scene {
       colisionaSArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
       
   
-      if(!colisionaSArriba && !this.teclasMovimiento[3])
+      if(!colisionaS && !colisionaSArriba && !this.teclasMovimiento[3])
         this.moveDirection.z = 1;
       else
         this.moveDirection.z = 0;
@@ -472,7 +486,12 @@ class MyScene extends THREE.Scene {
   
       direccion.x = -originalZ;
       direccion.z = originalX;
- 
+      
+      //Rayos laterales
+      origen2 = new THREE.Vector3(posicion.x, 1, posicion.z-5);
+      origen3 = new THREE.Vector3(posicion.x, 1, posicion.z+5);
+
+      colisionaD = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
 
       origen2 = new THREE.Vector3(posicion.x, 7, posicion.z-5);
       origen3 = new THREE.Vector3(posicion.x, 7, posicion.z+5);
@@ -480,7 +499,7 @@ class MyScene extends THREE.Scene {
       colisionaDArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
   
   
-      if(!colisionaDArriba&& !this.teclasMovimiento[0])
+      if(!colisionaD && !colisionaDArriba&& !this.teclasMovimiento[0])
         this.moveDirection.x = 1;
       else
         this.moveDirection.x = 0;
@@ -492,7 +511,11 @@ class MyScene extends THREE.Scene {
     
       //var direccion = new THREE.Vector3(0,0,-1);
 
-    
+      //2 rayos extra
+      origen2 = new THREE.Vector3(posicion.x-5, 1, posicion.z);
+      origen3 = new THREE.Vector3(posicion.x+5, 1, posicion.z);
+  
+      colisionaW = this.comprueba3Colisiones(origen,origen2,origen3,direccion);
       
       origen2 = new THREE.Vector3(posicion.x-5, 7, posicion.z);
       origen3 = new THREE.Vector3(posicion.x+5, 7, posicion.z);
@@ -500,7 +523,7 @@ class MyScene extends THREE.Scene {
       colisionaWArriba = this.comprueba3Colisiones(origenArriba,origen2,origen3,direccion);
       
   
-      if(!colisionaWArriba&& !this.teclasMovimiento[1])
+      if(!colisionaW && !colisionaWArriba&& !this.teclasMovimiento[1])
         this.moveDirection.z = -1;
       else
         this.moveDirection.z = 0;
@@ -512,13 +535,15 @@ class MyScene extends THREE.Scene {
       this.iniciarPasos();
     }
 
-    if(colisionaWArriba || colisionaAArriba || colisionaSArriba || colisionaDArriba ){
+    if(colisionaA || colisionaS || colisionaD || colisionaW || colisionaWArriba || colisionaAArriba 
+      || colisionaSArriba || colisionaDArriba ){
       return true;
     }else{
       return false;
     }
 
 
+    
     
   }
 
@@ -566,28 +591,32 @@ class MyScene extends THREE.Scene {
       return false;
   }
 
+  objetosChocables(){
+     //Objetos de la escena
+     var objects = [];
+    
+     this.traverse(function(object) {
+       if (object instanceof THREE.Mesh ) {
+         objects.push(object);
+       }
+     });
 
+     return objects;
+  
+  }
 
   lanzaRayo(rotacion, origen, direccion){
 
 
-    //Objetos de la escena
-    var objects = [];
-    
-    this.traverse(function(object) {
-      if (object instanceof THREE.Mesh) {
-        objects.push(object);
-      }
-    });
-
     //var matrizRotacion = new THREE.Matrix4().makeRotationY(rotacion);
     var rayo = new THREE.Raycaster();
+    
 
     //direccion.applyMatrix4(matrizRotacion);
  
     rayo.set(origen, direccion);
 
-    var impactados = rayo.intersectObjects(objects,true);
+    var impactados = rayo.intersectObjects(this.chocables,true);
     //var impactados = rayo.intersectObjects(objects,true);
     
 
