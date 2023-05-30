@@ -2,9 +2,10 @@ import * as THREE from './libs/three.module.js'
 import {CSG} from './libs/CSG-v2.js'
 
 import {Puerta} from './Puerta.js'
+import { Cuarto } from './Cuarto.js';
  
 class EsqueletoCuarto extends THREE.Object3D {
-  constructor(llave){
+  constructor(llave, esqueleto){
     super();
     var muroG = new THREE.BoxGeometry(60,30,5);
     muroG.translate(0,15,0);
@@ -67,6 +68,11 @@ class EsqueletoCuarto extends THREE.Object3D {
     this.puertaPosicionada.rotation.y = Math.PI/2;
     this.puertaPosicionada.position.set(7.5,0,-27.5);
     this.add(this.puertaPosicionada);
+
+    //Contenido del cuarto
+    this.cuarto = new Cuarto(esqueleto);
+    this.add(this.cuarto);
+    
   }
   createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){
     var loader = new THREE.TextureLoader();
