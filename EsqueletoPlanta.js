@@ -130,6 +130,11 @@ class EsqueletoPlanta extends THREE.Object3D {
     //Puerta de salida
     this.puertaSalida = new Puerta();
     this.puertaSalida.name = "puertaSalida";
+    this.puertaSalida.cambiarLock();
+    this.pomoPuertaSalida = this.puertaSalida.getObjectByName("esferaPomo");
+    console.log(this.pomoPuertaSalida);
+    this.pomoPuertaSalida.material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+
     this.puertaSalida.rotation.y = Math.PI/2;
 
     this.puertaPosicionada = new THREE.Object3D();
