@@ -132,7 +132,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.puertaSalida.name = "puertaSalida";
     this.puertaSalida.cambiarLock();
     this.pomoPuertaSalida = this.puertaSalida.getObjectByName("esferaPomo");
-    console.log(this.pomoPuertaSalida);
     this.pomoPuertaSalida.material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
 
     this.puertaSalida.rotation.y = Math.PI/2;
@@ -229,6 +228,7 @@ class EsqueletoPlanta extends THREE.Object3D {
 
     if (botonLuz1.color === 0xffff00 && botonLuz2.color === 0xffff00 && botonLuz3.color === 0xffff00 && botonLuz4.color === 0xffff00) {
       console.log("Has ganado");
+      this.puertaSalida.cambiarLock();
       this.puertaSalida.abrirPuerta();
     }
     
