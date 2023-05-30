@@ -188,7 +188,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.boton.name = "Boton1";
     this.boton.position.x = -150-1-75-15;
     this.boton.position.z = -75-5-1-3;
-    this.boton.position.y = 7+1;
+    this.boton.position.y = 7;
     this.add(this.boton);
 
     //Boton2
@@ -197,7 +197,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.boton2.name="Boton2";
     this.boton2.position.x = -150-1-75-15+5;
     this.boton2.position.z = -75-5-1-3;
-    this.boton2.position.y = 7+1;
+    this.boton2.position.y = 7;
 
     this.add(this.boton2);
 
