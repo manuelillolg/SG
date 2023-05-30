@@ -5,7 +5,7 @@ import {Puerta} from './Puerta.js'
 import { Cuarto } from './Cuarto.js';
  
 class EsqueletoCuarto extends THREE.Object3D {
-  constructor(llave){
+  constructor(llave, esqueleto){
     super();
     var muroG = new THREE.BoxGeometry(60,30,5);
     muroG.translate(0,15,0);
@@ -70,7 +70,8 @@ class EsqueletoCuarto extends THREE.Object3D {
     this.add(this.puertaPosicionada);
 
     //Contenido del cuarto
-    this.cuarto = new Cuarto();
+    this.cuarto = new Cuarto(esqueleto);
+    this.add(this.cuarto);
     
   }
   createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){

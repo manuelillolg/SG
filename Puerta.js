@@ -25,16 +25,16 @@ class Puerta extends THREE.Object3D {
     var puertaMat = new THREE.MeshPhongMaterial({map: textura});
 
     var puertaGeo = new THREE.BoxGeometry(15,22,5);
+    puertaGeo.scale(1,1,0.3);
     this.puerta = new THREE.Mesh(puertaGeo,puertaMat);
     this.puerta.position.set(7.5,11,0);
 
 
     //Creacion del pomo
     this.pomo = this.crearPomo();
-
-
+    
     this.puerta.add(this.pomo);
-    this.puerta.scale.z = 0.3;
+    
     
     this.add(this.puerta);
 
@@ -55,10 +55,11 @@ class Puerta extends THREE.Object3D {
     esfera.userData = this;
     esfera.name = "esferaPomo";
 
-    esfera.position.set(0,2,0);
+    esfera.position.set(0,1.5,0);
 
     var cilindroGeo = new THREE.CylinderGeometry(1,0.5,2,32);
     var cilindro = new THREE.Mesh(cilindroGeo,pomoMat);
+    cilindro.scale.set(1,0.5,1);
     cilindro.position.set(0,0.25,0);
 
     var pomo = new THREE.Object3D();
@@ -66,12 +67,19 @@ class Puerta extends THREE.Object3D {
     pomo.add(cilindro);
 
     pomo.rotateX(Math.PI/2);
-    pomo.position.set(5.5,0,2);
+    pomo.position.set(5.5,0,0.5);
 
     return pomo;
 
   }
   
+  abrirPuerta(){
+    this.abrir.start();
+  }
+
+  cerrarPuerta(){
+    this.cerrar.start();
+  }
   
 
   recibeClick(){
@@ -79,10 +87,10 @@ class Puerta extends THREE.Object3D {
     var mensaje = document.getElementById("mensaje");
     if(this.llave==null || this.llave.cogida()){
       if(this.cerrado){
-        this.abrir.start();
+        this.abrirPuerta();
       }
       else{
-        this.cerrar.start();
+        this.cerrarPuerta();
       }
     }
     else{

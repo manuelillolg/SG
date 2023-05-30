@@ -92,9 +92,9 @@ class EsqueletoPlanta extends THREE.Object3D {
     
 
     //Cuarto
-    var cuarto = new EsqueletoCuarto(this.llave);
-    cuarto.name = "cuarto";
-    cuarto.position.set(30,0,30+37.5);
+    this.cuarto = new EsqueletoCuarto(this.llave, this);
+    this.cuarto.name = "cuarto";
+    this.cuarto.position.set(30,0,30+37.5);
 
 
     
@@ -114,21 +114,22 @@ class EsqueletoPlanta extends THREE.Object3D {
     muroSalidaDerecha.position.set(122.5/2+60,15,2.5+40+5+50);
     this.add(muroSalidaDerecha);
 
-     //MuroSalidIzquierda
-     var muroSalidaIzquierda = new THREE.Mesh(muroSalidaG,muroSalidaM);
-     muroSalidaIzquierda.position.set((122.5/2)+122.5+60+15,15,2.5+40+5+50);
-     this.add(muroSalidaIzquierda);
+    //MuroSalidIzquierda
+    var muroSalidaIzquierda = new THREE.Mesh(muroSalidaG,muroSalidaM);
+    muroSalidaIzquierda.position.set((122.5/2)+122.5+60+15,15,2.5+40+5+50);
+    this.add(muroSalidaIzquierda);
 
-     //MuroSalidaArriba
-     var muroArribaG = new THREE.BoxGeometry(15,8,5);
-     muroArribaG.translate(7.5+60+122.5,4+22,-2.5+40+60);
-     var muroArribaM = this.createTextura("./imgs/pared.jpg", "./imgs/paredNormal.jpg",1,1,3,1 );
-     var arriba = new THREE.Mesh(muroArribaG,muroArribaM);
-     this.add(arriba);
+    //MuroSalidaArriba
+    var muroArribaG = new THREE.BoxGeometry(15,8,5);
+    muroArribaG.translate(7.5+60+122.5,4+22,-2.5+40+60);
+    var muroArribaM = this.createTextura("./imgs/pared.jpg", "./imgs/paredNormal.jpg",1,1,3,1 );
+    var arriba = new THREE.Mesh(muroArribaG,muroArribaM);
+    this.add(arriba);
 
 
-     //Puerta de salida
+    //Puerta de salida
     this.puertaSalida = new Puerta();
+    this.puertaSalida.name = "puertaSalida";
     this.puertaSalida.rotation.y = Math.PI/2;
 
     this.puertaPosicionada = new THREE.Object3D();
@@ -139,8 +140,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.puertaPosicionada.position.set(15+60+122.5,0,-1.5+40+60);
     this.add(this.puertaPosicionada);
 
-     
-
 
     //Suelo
     var color = new THREE.MeshPhongMaterial({color: 0xF1F5C8, map: marmol});  
@@ -148,7 +147,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     sueloG.translate(0,-1,0);
     var suelo = new THREE.Mesh(sueloG,color);
 
-    this.add(clase1, clase2, clase3, clase4, muroFin, muroPasillo,cuarto,baño, suelo);
+    this.add(clase1, clase2, clase3, clase4, muroFin, muroPasillo,this.cuarto,baño, suelo);
 
     //Candidatos de colisiones
     this.candidates = clase1.candidates;
@@ -217,6 +216,19 @@ class EsqueletoPlanta extends THREE.Object3D {
 
   }
 
+  compruebaJuego(){
+    var botonLuz1 = this.cuarto.getObjectByName("botonLuz1");
+    var botonLuz2 = this.cuarto.getObjectByName("botonLuz2");
+    var botonLuz3 = this.cuarto.getObjectByName("botonLuz3");
+    var botonLuz4 = this.cuarto.getObjectByName("botonLuz4");
+
+    if (botonLuz1.color === 0xffff00 && botonLuz2.color === 0xffff00 && botonLuz3.color === 0xffff00 && botonLuz4.color === 0xffff00) {
+      console.log("Has ganado");
+      this.puertaSalida.abrirPuerta();
+    }
+    
+  }
+
   update(){
     if (this.llave.parent) {
       this.llave.update();
@@ -244,6 +256,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     techo.position.y += 30;
     this.add(techo);
   }
+
   createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){
     var loader = new THREE.TextureLoader();
     var normal = loader.load(imagenNormal);

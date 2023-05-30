@@ -683,10 +683,14 @@ class MyScene extends THREE.Scene {
     var llave2 = this.model.getObjectByName("llave2");
     var llave1 = this.model.getObjectByName("llave1");
 
+    var botonLuz1 = cuarto.getObjectByName("botonLuz1");
+    var botonLuz2 = cuarto.getObjectByName("botonLuz2");
+    var botonLuz3 = cuarto.getObjectByName("botonLuz3");
+    var botonLuz4 = cuarto.getObjectByName("botonLuz4");
 
-    
 
-    this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3],pomoSalida, pomoCuarto, boton1, boton2, llave2, llave1];
+
+    this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3],pomoSalida, pomoCuarto, boton1, boton2, llave2, llave1, botonLuz1, botonLuz2, botonLuz3, botonLuz4];
     
   }
   pick(event){
