@@ -7,6 +7,7 @@ class Puerta extends THREE.Object3D {
     
     //Llave asociada
     this.llave = null;
+    this.lock = false;
 
 
     // Se crea la parte de la interfaz que corresponde a la caja
@@ -72,9 +73,28 @@ class Puerta extends THREE.Object3D {
     return pomo;
 
   }
+
+  cambiarLock(){
+    this.lock = !this.lock;
+  }
   
   abrirPuerta(){
-    this.abrir.start();
+    if(!this.lock){
+      this.abrir.start();
+    }
+    else{
+      mensaje.textContent = "La puerta está cerrada";
+      
+      mensaje.style.display = "block";
+     
+    }
+
+    var tiempoEspera = 3000;
+
+    // Programa la ocultación del mensaje después del tiempo especificado
+    setTimeout(function() {
+      mensaje.style.display = "none";
+    }, tiempoEspera);
   }
 
   cerrarPuerta(){
