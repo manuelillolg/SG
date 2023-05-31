@@ -3,7 +3,7 @@ import * as THREE from '../libs/three.module.js'
 import { Puerta } from './Puerta.js';
  
 class Clase extends THREE.Object3D {
-  constructor() {
+  constructor(listener) {
     super();
     
 
@@ -52,7 +52,7 @@ class Clase extends THREE.Object3D {
   
 
     //Puerta
-    this.puerta = new Puerta();
+    this.puerta = new Puerta(listener);
     this.puerta.rotation.y = Math.PI/2;
 
     this.puertaPosicionada = new THREE.Object3D();

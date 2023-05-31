@@ -53,7 +53,10 @@ class MyScene extends THREE.Scene {
     // Por último creamos el modelo.
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-    this.model = new EsqueletoPlanta();
+
+    //sonido
+   this.createSound();
+    this.model = new EsqueletoPlanta(this.listener);
     this.add (this.model);
     this.model.name = "modelo";
 
@@ -92,10 +95,11 @@ class MyScene extends THREE.Scene {
    //Iniciar pickableObjects
    this.getPickableObjects();
 
-   //sonido
-   this.createSound();
+   
 
    this.chocables = this.objetosChocables();
+
+   this.background=new THREE.Color(0x000000);
    
   
   }
@@ -316,11 +320,14 @@ class MyScene extends THREE.Scene {
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
     
-    if(this.ratonActivo){
-      
-    }
+    
 
     this.model.update();
+
+    if(this.esFinJuego()){
+      window.location.href = 'fin.html';
+      
+    }
     
 
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
@@ -610,10 +617,7 @@ class MyScene extends THREE.Scene {
 
     //var matrizRotacion = new THREE.Matrix4().makeRotationY(rotacion);
     var rayo = new THREE.Raycaster();
-    
-
     //direccion.applyMatrix4(matrizRotacion);
- 
     rayo.set(origen, direccion);
 
     var impactados = rayo.intersectObjects(this.chocables,true);
@@ -757,12 +761,12 @@ class MyScene extends THREE.Scene {
 
   //Método para el sonido
   createSound(){
-    var listener = new THREE.AudioListener();
-    this.camera.add(listener);
+    this.listener = new THREE.AudioListener();
+    this.camera.add(this.listener);
 
     this.audioLoader = new THREE.AudioLoader();
-    this.tormenta = this.createTormenta(listener);
-    this.pasos = this.createPasos(listener);
+    this.tormenta = this.createTormenta(this.listener);
+    this.pasos = this.createPasos(this.listener);
   }
 
   createTormenta(listener){
@@ -788,6 +792,8 @@ class MyScene extends THREE.Scene {
     return pasos;
   }
 
+ 
+
   iniciarTormenta(){
     this.tormenta.play();
   }
@@ -802,6 +808,16 @@ class MyScene extends THREE.Scene {
   pararPasos(){
     if(this.pasos.isPlaying)
       this.pasos.stop();
+  }
+
+  esFinJuego(){
+    var worldPosition = new THREE.Vector3();
+    this.personaje.getWorldPosition(worldPosition);
+
+    if (worldPosition.z > 100) {
+      return true;
+    }else
+      return false;
   }
 }
 
