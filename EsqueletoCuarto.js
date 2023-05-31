@@ -5,7 +5,7 @@ import {Puerta} from './Puerta.js'
 import { Cuarto } from './Cuarto.js';
  
 class EsqueletoCuarto extends THREE.Object3D {
-  constructor(llave, esqueleto){
+  constructor(llave, esqueleto,listener){
     super();
     var muroG = new THREE.BoxGeometry(60,30,5);
     muroG.translate(0,15,0);
@@ -57,7 +57,7 @@ class EsqueletoCuarto extends THREE.Object3D {
 
 
     //Puerta
-    this.puerta = new Puerta();
+    this.puerta = new Puerta(listener);
     this.puerta.asociaLlave(llave);
     this.puerta.rotation.y = Math.PI/2;
 

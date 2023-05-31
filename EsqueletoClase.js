@@ -3,7 +3,7 @@ import {CSG} from './libs/CSG-v2.js'
 import {Clase} from './Clase.js'
  
 class EsqueletoClase extends THREE.Object3D {
-  constructor(){
+  constructor(listener){
     super();
     var muroG = new THREE.BoxGeometry(160,30,5);
     muroG.translate(0,15,0);
@@ -93,7 +93,7 @@ class EsqueletoClase extends THREE.Object3D {
     var muros = new CSG();
     muros.union([muro1,muro2,muro3,muro4]);    
     
-    var clase = new Clase();
+    var clase = new Clase(listener);
     clase.position.set(-75,0,-75);
 
     var claseOrientada = new THREE.Object3D();

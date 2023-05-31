@@ -2,7 +2,7 @@ import * as THREE from '../libs/three.module.js'
 import * as TWEEN from '../libs/tween.esm.js'
  
 class Puerta extends THREE.Object3D {
-  constructor() {
+  constructor(listener) {
     super();
     
     //Llave asociada
@@ -38,6 +38,11 @@ class Puerta extends THREE.Object3D {
     
     
     this.add(this.puerta);
+
+    this.audioLoader = new THREE.AudioLoader();
+
+    this.abrirSound = this.createAbrirSound(listener);
+    this.cerrarSound = this.createCerrarSound(listener);
 
 
   }
@@ -80,6 +85,7 @@ class Puerta extends THREE.Object3D {
   
   abrirPuerta(){
     if(!this.lock){
+      this.abrirSound.play();
       this.abrir.start();
     }
     else{
@@ -98,6 +104,7 @@ class Puerta extends THREE.Object3D {
   }
 
   cerrarPuerta(){
+    this.cerrarSound.play();
     this.cerrar.start();
   }
   
@@ -180,6 +187,26 @@ class Puerta extends THREE.Object3D {
     
     return abrir;
 
+  }
+
+  createAbrirSound(listener){
+    var abrir = new THREE.Audio(listener);
+    this.audioLoader.load('audio/abrir.mp3',function(buffer){
+      abrir.setBuffer(buffer);
+      abrir.setVolume(1);
+    });
+
+    return abrir;
+  }
+
+  createCerrarSound(listener){
+    var cerrar = new THREE.Audio(listener);
+    this.audioLoader.load('audio/cerrar.mp3',function(buffer){
+      cerrar.setBuffer(buffer);
+      cerrar.setVolume(1);
+    });
+
+    return cerrar;
   }
 
 }

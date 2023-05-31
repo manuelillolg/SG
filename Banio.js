@@ -9,7 +9,7 @@ import { Puerta } from './Puerta.js'
 import { Box3 } from './libs/three.module.js'
  
 class Banio extends THREE.Object3D {
-  constructor(llaveAsociada) {
+  constructor(llaveAsociada,listener) {
     super();
     
     // Se crea la parte de la interfaz que corresponde a la caja
@@ -48,7 +48,7 @@ class Banio extends THREE.Object3D {
     this.add(lav2);
 
     //Puerta
-    this.puerta = new Puerta();
+    this.puerta = new Puerta(listener);
     this.puerta.rotation.y = Math.PI/2;
     this.puerta.position.set(-47.5,0,+7.5);
     this.puerta.asociaLlave(llaveAsociada);

@@ -9,16 +9,16 @@ import {Llave} from './Llave.js';
 import {Puerta} from './Puerta.js';
 
 class EsqueletoPlanta extends THREE.Object3D {
-  constructor(){
+  constructor(listener){
     super();
 
-    var clase1 = new EsqueletoClase();
+    var clase1 = new EsqueletoClase(listener);
     clase1.name = "clase1";
-    var clase2 = new EsqueletoClase();
+    var clase2 = new EsqueletoClase(listener);
     clase2.name = "clase2";
-    var clase3 = new EsqueletoClase();
+    var clase3 = new EsqueletoClase(listener);
     clase3.name = "clase3";
-    var clase4 = new EsqueletoClase();
+    var clase4 = new EsqueletoClase(listener);
     clase4.name = "clase4";
 
 
@@ -66,6 +66,9 @@ class EsqueletoPlanta extends THREE.Object3D {
     muroPasillo.scale.set(160*2,30,5);
     muroPasillo.position.set(-80*2,0,40);
 
+    //Sonido para la llave 2
+    this.audioLoader = new THREE.AudioLoader();
+    this.sonidoLlave = this.createApareceLlave(listener);
     //Llave2
     this.llave = new Llave();
     this.llave.position.x = -150-1-75-20-15-10;
@@ -75,6 +78,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.llave.llave.material.transparent = true;
     this.llave.llave.material.opacity = 0;
     this.add(this.llave);
+    this.llave.add(this.sonidoLlave);
     
     //Llave1
     this.llave1 = new Llave();
@@ -92,7 +96,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     
 
     //Cuarto
-    this.cuarto = new EsqueletoCuarto(this.llave, this);
+    this.cuarto = new EsqueletoCuarto(this.llave, this,listener);
     this.cuarto.name = "cuarto";
     this.cuarto.position.set(30,0,30+37.5);
 
@@ -100,7 +104,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     
 
     //baño
-    var baño = new EsqueletoBaño(this.llave1);
+    var baño = new EsqueletoBaño(this.llave1,listener);
     baño.name = "baño";
     baño.position.set(50+160*2,0,50);
     
@@ -128,7 +132,7 @@ class EsqueletoPlanta extends THREE.Object3D {
 
 
     //Puerta de salida
-    this.puertaSalida = new Puerta();
+    this.puertaSalida = new Puerta(listener);
     this.puertaSalida.name = "puertaSalida";
     this.puertaSalida.cambiarLock();
     this.pomoPuertaSalida = this.puertaSalida.getObjectByName("esferaPomo");
@@ -182,6 +186,22 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.proyeccionFondo.position.x = -5-150-5-5-150;
     this.add(this.proyeccionFondo);
 
+    //Pista pasillo
+    var pistaGeom = new THREE.PlaneGeometry(15,15);
+
+    pistaGeom.translate(0,15,0);
+    
+    var pistaTextura = loader.load('imgs/pista.jpg');
+    pistaTextura.wrapS = THREE.ClampToEdgeWrapping;
+    pistaTextura.wrapT = THREE.ClampToEdgeWrapping;
+    
+   
+    var pistaMaterial = new THREE.MeshPhongMaterial( { color: 0xffffff , map:pistaTextura } );
+    var pista = new THREE.Mesh( pistaGeom, pistaMaterial ) ;
+    pista.position.z+=0.2;
+    pista.position.x -=160;
+    this.add(pista);
+    
 
     //Boton
     var materialBoton1 = new THREE.MeshPhongMaterial({color:0xFF0000});
@@ -210,6 +230,7 @@ class EsqueletoPlanta extends THREE.Object3D {
   muestraLlave(){
     this.llave.llave.material.transparent = false;
     this.llave.llave.material.opacity = 1;
+    this.sonidoLlave.play()
 
   }
 
@@ -220,7 +241,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     var botonLuz4 = this.cuarto.getObjectByName("botonLuz4");
 
     if (botonLuz1.color === 0xffff00 && botonLuz2.color === 0xffff00 && botonLuz3.color === 0xffff00 && botonLuz4.color === 0xffff00) {
-      console.log("Has ganado");
       this.puertaSalida.cambiarLock();
       this.puertaSalida.abrirPuerta();
     }
@@ -238,18 +258,18 @@ class EsqueletoPlanta extends THREE.Object3D {
   createTecho(){
     var loader = new THREE.TextureLoader();
     var gotele = loader.load("./imgs/pared.jpg");
-    gotele.repeat.set(90,80);
+    gotele.repeat.set(90,40);
     gotele.wrapS = THREE.RepeatWrapping;
     gotele.wrapT = THREE.RepeatWrapping;
     var goteleNormal = loader.load("./imgs/paredNormal.jpg");
-    goteleNormal.repeat.set(90,80);
+    goteleNormal.repeat.set(90,40);
     goteleNormal.wrapS = THREE.RepeatWrapping;
     goteleNormal.wrapT = THREE.RepeatWrapping;
 
-    var techoGeom = new THREE.BoxGeometry(900,2,800);
+    var techoGeom = new THREE.BoxGeometry(900,2,300);
     var color = new THREE.MeshPhongMaterial({color: 0xFFFFFF, map:gotele, normalMap: goteleNormal});  
     
-    techoGeom.translate(0,1,0);
+    techoGeom.translate(0,1,-30);
     var techo = new THREE.Mesh(techoGeom,color);
     techo.position.y += 30;
     this.add(techo);
@@ -291,6 +311,23 @@ class EsqueletoPlanta extends THREE.Object3D {
     return material;
 
 
+  }
+
+  createApareceLlave(listener){
+    var llave = new THREE.PositionalAudio(listener);
+    this.audioLoader.load('audio/apareceLlave.mp3', function(buffer) {
+      // Crear un PositionalAudio y asignarle el buffer cargado
+      
+      llave.setBuffer(buffer);
+    
+      // Posicionar el audio en una ubicación específica en la escena
+      
+      llave.position.set(-150-1-75-20-15-10,15 , -75-5-1-3-30);
+      llave.setVolume(10);
+      
+    });
+    
+    return llave;
   }
 }
 

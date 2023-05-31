@@ -46,7 +46,7 @@ class Proyeccion extends THREE.Object3D {
     }
 
     //console.log(this.posicionX + ", " + this.posicionY);
-    if(this.posicionX == 1 && this.posicionY == 1){
+    if(this.posicionX == 2 && this.posicionY == 2){
         return true;
     }else
         return false;
@@ -65,7 +65,7 @@ class Proyeccion extends THREE.Object3D {
         this.posicionY = 0;
     }
 
-    if(this.posicionX == 1 && this.posicionY == 1){
+    if(this.posicionX == 2 && this.posicionY == 2){
       return true;
     }else
       return false;
