@@ -55,7 +55,7 @@ class MyScene extends THREE.Scene {
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
 
     //sonido
-   this.createSound();
+    this.createSound();
     this.model = new EsqueletoPlanta(this.listener);
     this.add (this.model);
     this.model.name = "modelo";
@@ -95,7 +95,6 @@ class MyScene extends THREE.Scene {
    //Iniciar pickableObjects
    this.getPickableObjects();
 
-   
 
    this.chocables = this.objetosChocables();
 
