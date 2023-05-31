@@ -120,16 +120,6 @@ class Proyector extends THREE.Object3D {
   }
     
   update () {
-    // Con independencia de cómo se escriban las 3 siguientes líneas, el orden en el que se aplican las transformaciones es:
-    // Primero, el escalado
-    // Segundo, la rotación en Z
-    // Después, la rotación en Y
-    // Luego, la rotación en X
-    // Y por último la traslación
-   
-    // this.position.set (this.guiControls.posX,this.guiControls.posY,this.guiControls.posZ);
-    // this.rotation.set (this.guiControls.rotX,this.guiControls.rotY,this.guiControls.rotZ);
-    // this.scale.set (this.guiControls.sizeX,this.guiControls.sizeY,this.guiControls.sizeZ);
     this.palanca.rotateY(0.01);
   }
 
@@ -173,45 +163,7 @@ class Proyector extends THREE.Object3D {
 
   }
 
-  animacion(){
-    var objeto = this;
 
-    if(!this.cerrado){
-      var origen = {angulo:0};
-      var destino = {angulo:Math.PI/2};
-      //this.cerrado = true;
-    }
-    else{
-      var origen = {angulo:Math.PI/2};
-      var destino = {angulo:0};
-      //this.cerrado = false;
-    }
-
-    var abrir = new TWEEN.Tween(origen)
-    .to(destino,2000)
-    .onUpdate(function(){
-      objeto.rotation.y = origen.angulo;
-      //objeto.position.x = Math.cos(origen.angulo);
-      //console.log(this.estoyAnimacion);
-    })
-    .onStart(function(){
-      //console.log("he empezado");
-      this.estoyAnimacion = true;
-    })
-    .onComplete(function(){
-      //console.log("he terminado");
-      this.estoyAnimacion = false;
-    })
-    .start();
-
-    function animate() {
-      requestAnimationFrame(animate);
-      TWEEN.update();
-    }
-
-    animate();
-    
-  }
 }
 
 export { Proyector };

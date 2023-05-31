@@ -153,10 +153,7 @@ class EsqueletoPlanta extends THREE.Object3D {
 
     this.add(clase1, clase2, clase3, clase4, muroFin, muroPasillo,this.cuarto,baño, suelo);
 
-    //Candidatos de colisiones
-    this.candidates = clase1.candidates;
-    this.pickeableObjects = clase1.pickeableObjects;
-
+    //Planta
     this.name = "planta";
 
 
@@ -208,10 +205,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.createTecho();
 
     
-  }
-
-  getCandidatos(){
-    return this.candidates;
   }
 
   muestraLlave(){
