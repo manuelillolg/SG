@@ -7,11 +7,7 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 import { Stats } from './libs/stats.module.js'
 
 // Clases de mi proyecto
-import { EsqueletoClase } from './EsqueletoClase.js'
-import { EsqueletoCuarto } from './EsqueletoCuarto.js'
 import { EsqueletoPlanta } from './EsqueletoPlanta.js'
-import {Cubo} from './Cubo.js'
-
 
  
 /// La clase fachada del modelo
@@ -43,13 +39,11 @@ class MyScene extends THREE.Scene {
  
     this.createCamera ();
     this.createBody();
-    
-    // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-    //this.axis = new THREE.AxesHelper (5);
-    //this.add (this.axis);
-    
+        
     this.personaje.position.z = +40;
     this.personaje.position.x = 370;
+
+
     // Por último creamos el modelo.
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
@@ -62,7 +56,7 @@ class MyScene extends THREE.Scene {
 
    
 
-    //Pruebas del movimiento de la cámara
+    //Movimiento de la cámara
     this.keyboard = {};
     this.moveSpeed = 0.5;
     this.moveDirection = new THREE.Vector3();
@@ -80,20 +74,16 @@ class MyScene extends THREE.Scene {
       }
     };
 
-  //Pruebas para el rayo de la colisiones
-  this.lineaRayo;
-  
+    //Picking
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
 
-  //Picking
-  this.raycaster = new THREE.Raycaster();
-  this.mouse = new THREE.Vector2();
+    //Movimiento
+    this.teclasMovimiento= [false,false,false,false];
+    this.ratonActivo = false;
 
-   //Movimiento
-   this.teclasMovimiento= [false,false,false,false];
-   this.ratonActivo = false;
-
-   //Iniciar pickableObjects
-   this.getPickableObjects();
+    //Iniciar pickableObjects
+    this.pickableObjects = this.getPickableObjects();
 
 
    this.chocables = this.objetosChocables();
@@ -176,7 +166,6 @@ class MyScene extends THREE.Scene {
     this.guiControls = {
       // En el contexto de una función   this   alude a la función
       lightIntensity : 0.5,
-      axisOnOff : true
     }
 
     // Se crea una sección para los controles de esta clase
@@ -186,11 +175,6 @@ class MyScene extends THREE.Scene {
     folder.add (this.guiControls, 'lightIntensity', 0, 1, 0.1)
       .name('Intensidad de la Luz : ')
       .onChange ( (value) => this.setLightIntensity (value) );
-    
-    // Y otro para mostrar u ocultar los ejes
-    folder.add (this.guiControls, 'axisOnOff')
-      .name ('Mostrar ejes : ')
-      .onChange ( (value) => this.setAxisVisible (value) );
     
     return gui;
   }
@@ -230,11 +214,7 @@ class MyScene extends THREE.Scene {
   setLightIntensity (valor) {
     this.ambientLight.intensity = valor;
   }
-  
-  setAxisVisible (valor) {
-    this.axis.visible = valor;
-  }
-  
+    
   createRenderer (myCanvas) {
     // Se recibe el lienzo sobre el que se van a hacer los renderizados. Un div definido en el html.
     
@@ -275,6 +255,7 @@ class MyScene extends THREE.Scene {
     // Y también el tamaño del renderizador
     this.renderer.setSize (window.innerWidth, window.innerHeight);
   }
+
   createBody() {
    
     let bodyH = this.personaje.getObjectByName("camara").position.y ;
@@ -336,6 +317,7 @@ class MyScene extends THREE.Scene {
 
 
   }
+
   teclaLevantada(event) {
 
     switch(event.key){
@@ -516,34 +498,33 @@ class MyScene extends THREE.Scene {
       return false;
     }
 
+
     
   }
 
   comprueba3Colisiones(origen,origen2,origen3,direccion){
-      
-      var  impactados = this.lanzaRayo(this.personaje.rotation.y,origen,direccion);
+    var  impactados = this.lanzaRayo(this.personaje.rotation.y,origen,direccion);
   
-      if(impactados.length > 0)
-        var colisiona1 = this.checkColisiones(impactados[0]);
-      
-      else
-        var colisiona1 = false;
+    if(impactados.length > 0)
+      var colisiona1 = this.checkColisiones(impactados[0]);
+    
+    else
+      var colisiona1 = false;
+
+    var impactados2 = this.lanzaRayo(origen2,direccion);
+    
+    if(impactados2.length > 0 )
+      var colisiona2 = this.checkColisiones(impactados2[0]);
+    else
+      var colisiona2 = false;
+    var impactados3 = this.lanzaRayo(origen3,direccion);
+
+    if(impactados3.length > 0 )
+      var colisiona3 = this.checkColisiones(impactados3[0]);
+    else
+      var colisiona3 = false;
 
      
-      var impactados2 = this.lanzaRayo(this.personaje.rotation.y, origen2,direccion);
-      
-      if(impactados2.length > 0 )
-        var colisiona2 = this.checkColisiones(impactados2[0]);
-      else
-        var colisiona2 = false;
-
-      var impactados3 = this.lanzaRayo(this.personaje.rotation.y, origen3,direccion);
-
-      if(impactados3.length > 0 )
-        var colisiona3 = this.checkColisiones(impactados3[0]);
-      else
-        var colisiona3 = false;
-
       var colisiona;
 
      
@@ -551,16 +532,15 @@ class MyScene extends THREE.Scene {
          colisiona = true;
       else
          colisiona = false;
-
-      return colisiona;
+    return colisiona;
   }
 
-  checkColisiones(candidates) {
+  checkColisiones(candidato) {
     
-    if (typeof candidates !== "undefined") {
+    if (typeof candidato !== "undefined") {
 
-       if(candidates.distance <=7){
        
+       if(candidato.distance <= 7){
         return true;
        }
       }
@@ -581,7 +561,7 @@ class MyScene extends THREE.Scene {
   
   }
 
-  lanzaRayo(rotacion, origen, direccion){
+  lanzaRayo(origen, direccion){
 
 
     //var matrizRotacion = new THREE.Matrix4().makeRotationY(rotacion);
@@ -693,10 +673,12 @@ class MyScene extends THREE.Scene {
 
 
 
-    this.pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3],pomoSalida, pomoCuarto, boton1, boton2, llave2, llave1, botonLuz1, botonLuz2, botonLuz3, botonLuz4];
+    var pickableObjects = [pomoBanio, pomosClases[0], pomosClases[1], pomosClases[2], pomosClases[3],pomoSalida, pomoCuarto, boton1, boton2, llave2, llave1, botonLuz1, botonLuz2, botonLuz3, botonLuz4];
+    return pickableObjects;
     
   }
-  pick(event){
+
+  pick(){
    
     this.mouse.x = 0;
     this.mouse.y = 0;
@@ -820,7 +802,7 @@ $(function () {
     }
   });
 
-  window.addEventListener("click",(event) => scene.pick(event));
+  window.addEventListener("click",() => scene.pick());
   
   // Que no se nos olvide, la primera visualización.
   scene.update();
