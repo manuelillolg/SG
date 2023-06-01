@@ -1,5 +1,4 @@
 import * as THREE from './libs/three.module.js'
-import {CSG} from './libs/CSG-v2.js'
 import {Banio} from './Banio.js'
  
 class EsqueletoBaño extends THREE.Object3D {

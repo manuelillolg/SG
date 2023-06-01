@@ -69,6 +69,7 @@ class EsqueletoPlanta extends THREE.Object3D {
     //Sonido para la llave 2
     this.audioLoader = new THREE.AudioLoader();
     this.sonidoLlave = this.createApareceLlave(listener);
+
     //Llave2
     this.llave = new Llave();
     this.llave.position.x = -150-1-75-20-15-10;
@@ -85,31 +86,18 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.llave1.horizontal();
     this.llave1.position.x = 1+25+150+150+80;
     this.llave1.position.z = 80;
-    
-     //this.llave1.position.y = 4;
-     //this.llave1.position.z = 2;
-    //this.llave1.position.x = 350;
-    //this.llave1.position.z =  50;
     this.llave1.name="llave1";
     this.add(this.llave1);
 
-    
-
     //Cuarto
-    this.cuarto = new EsqueletoCuarto(this.llave, this,listener);
+    this.cuarto = new EsqueletoCuarto(this.llave, this, listener);
     this.cuarto.name = "cuarto";
     this.cuarto.position.set(30,0,30+37.5);
-
-
-    
 
     //baño
     var baño = new EsqueletoBaño(this.llave1,listener);
     baño.name = "baño";
     baño.position.set(50+160*2,0,50);
-    
-
-    
 
     //MuroSalidaDerecha
     var muroSalidaG = new THREE.BoxGeometry(122.5,30,5);
@@ -130,7 +118,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     var arriba = new THREE.Mesh(muroArribaG,muroArribaM);
     this.add(arriba);
 
-
     //Puerta de salida
     this.puertaSalida = new Puerta(listener);
     this.puertaSalida.name = "puertaSalida";
@@ -148,7 +135,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.puertaPosicionada.position.set(15+60+122.5,0,-1.5+40+60);
     this.add(this.puertaPosicionada);
 
-
     //Suelo
     var color = new THREE.MeshPhongMaterial({color: 0xF1F5C8, map: marmol});  
     var sueloG = new  THREE.BoxGeometry(900,2,800);
@@ -160,7 +146,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     //Planta
     this.name = "planta";
 
-
     //Proyector
     this.proyector = new Proyector();
     this.proyector.scale.set(0.5,0.5,-0.5);
@@ -169,8 +154,6 @@ class EsqueletoPlanta extends THREE.Object3D {
     this.proyector.position.y  = 7;
     
     this.proyector.name ="Proyector";
-    
-    
     this.add(this.proyector);
 
     //Proyeccion
@@ -222,9 +205,12 @@ class EsqueletoPlanta extends THREE.Object3D {
 
     this.add(this.boton2);
 
-    this.createTecho();
+    this.techo = this.createTecho();
+    this.add(this.techo);
 
-    
+    //Control de fin del juego
+    this.finJuego = false;
+
   }
 
   muestraLlave(){
@@ -240,9 +226,10 @@ class EsqueletoPlanta extends THREE.Object3D {
     var botonLuz3 = this.cuarto.getObjectByName("botonLuz3");
     var botonLuz4 = this.cuarto.getObjectByName("botonLuz4");
 
-    if (botonLuz1.color === 0xffff00 && botonLuz2.color === 0xffff00 && botonLuz3.color === 0xffff00 && botonLuz4.color === 0xffff00) {
+    if (botonLuz1.color === 0xffff00 && botonLuz2.color === 0xffff00 && botonLuz3.color === 0xffff00 && botonLuz4.color === 0xffff00 && this.finJuego === false) {
       this.puertaSalida.cambiarLock();
       this.puertaSalida.abrirPuerta();
+      this.finJuego = true;
     }
     
   }
@@ -272,7 +259,8 @@ class EsqueletoPlanta extends THREE.Object3D {
     techoGeom.translate(0,1,-30);
     var techo = new THREE.Mesh(techoGeom,color);
     techo.position.y += 30;
-    this.add(techo);
+
+    return techo;
   }
 
   createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){

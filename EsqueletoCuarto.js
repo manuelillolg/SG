@@ -1,11 +1,10 @@
 import * as THREE from './libs/three.module.js'
-import {CSG} from './libs/CSG-v2.js'
 
 import {Puerta} from './Puerta.js'
 import { Cuarto } from './Cuarto.js';
  
 class EsqueletoCuarto extends THREE.Object3D {
-  constructor(llave, esqueleto,listener){
+  constructor(llave, esqueleto, listener){
     super();
     var muroG = new THREE.BoxGeometry(60,30,5);
     muroG.translate(0,15,0);
@@ -18,7 +17,6 @@ class EsqueletoCuarto extends THREE.Object3D {
     muro2.scale.x = 0.95;
     var muro3 = new  THREE.Mesh(muroG,material);
     muro3.scale.x = 0.95;
-    var muro4 = new  THREE.Mesh(muroG,material);
 
     var muroIzquierdaGeom = new THREE.BoxGeometry(22.5,30,5);
     muroIzquierdaGeom.translate(0,15,0);
@@ -74,6 +72,7 @@ class EsqueletoCuarto extends THREE.Object3D {
     this.add(this.cuarto);
     
   }
+
   createTextura(imagen,imagenNormal,x,y,xLateral,yLateral){
     var loader = new THREE.TextureLoader();
     var normal = loader.load(imagenNormal);

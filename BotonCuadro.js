@@ -1,5 +1,4 @@
 import * as THREE from '../libs/three.module.js'
-import { CSG } from '../libs/CSG-v2.js'
 
 class BotonCuadro extends THREE.Object3D {
     constructor(esqueleto) {
@@ -19,10 +18,6 @@ class BotonCuadro extends THREE.Object3D {
       this.color = this.colores[0];
 
       this.esqueleto = esqueleto;
-    }
-
-    getColor(){
-        return this.color;
     }
   
     crearBoton(){

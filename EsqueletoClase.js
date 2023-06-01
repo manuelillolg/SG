@@ -14,7 +14,6 @@ class EsqueletoClase extends THREE.Object3D {
     gotele.wrapS = THREE.RepeatWrapping;
     gotele.wrapT = THREE.RepeatWrapping;
 
-    var tex;
     var goteleLateral = loader.load("./imgs/pared.jpg");
     var goteleLateralNormal = loader.load("./imgs/paredNormal.jpg");
     var goteleNormal = loader.load("./imgs/paredNormal.jpg");

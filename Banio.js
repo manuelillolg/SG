@@ -2,40 +2,19 @@ import * as THREE from '../libs/three.module.js'
 import { CSG } from '../libs/CSG-v2.js'
 
 import { Inodoro } from './Inodoro.js'
-import { Box } from './Box.js'
-import { Lavamanos } from './Lavamanos.js'
-import { Water } from './Water.js'
 import { Puerta } from './Puerta.js'
-import { Box3 } from './libs/three.module.js'
  
 class Banio extends THREE.Object3D {
   constructor(llaveAsociada,listener) {
     super();
-    
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
-   
 
-    //this.crearParedes();
+    this.inodoros = this.crearInodoros();
+    this.add(this.inodoros[0]);
+    this.add(this.inodoros[1]);
+    this.add(this.inodoros[2]);
 
-    this.crearInodoros();
-
-    this.crearCuartoSeparador();
-
-
-    //NO FUNCIONA
-    // //Creación de los lavamanos
-
-    // var lav1 = new Lavamanos();
-    // lav1.position.set(0,0,0);
-    // //this.add(lav1);
-
-
-    // //Creacion del water
-
-    // var water = new Water();
-    // water.position.set(0,0,0);
-    // //this.add(water);
+    this.separador = this.crearCuartoSeparador();
+    this.add(this.separador);
     
     //Lavabos
     var lav1 = this.crearLavabo();
@@ -55,40 +34,20 @@ class Banio extends THREE.Object3D {
     this.add(this.puerta);
   }
 
-  crearParedes(){
-    this.box1 = new Box();
-    this.box1.position.set(0,0,-47.5);
-    this.add(this.box1);
-
-    this.box2 = new Box();
-    this.box2.position.set(0,0,47.5);
-    this.add(this.box2);
-
-    this.box3 = new Box();
-    this.box3.rotation.y = Math.PI/2;
-    this.box3.position.set(47.5,0,0);
-    this.add(this.box3);
-
-    this.box4 = new Box();
-    this.box4.rotation.y = Math.PI/2;
-    this.box4.position.set(-47.5,0,0);
-    this.add(this.box4);
-
-  }
-
   crearInodoros(){
     //Creación de los inodoros
     var ino1 = new Inodoro();
     ino1.position.set(0,4,-41.5);
-    this.add(ino1);
+    
 
     var ino2 = new Inodoro();
     ino2.position.set(25,4,-41.5);
-    this.add(ino2);
+   
 
     var ino3 = new Inodoro();
     ino3.position.set(-25,4,-41.5);
-    this.add(ino3);
+    
+    return [ino1,ino2,ino3];
   }
 
   crearCuartoSeparador(){
@@ -132,7 +91,8 @@ class Banio extends THREE.Object3D {
 
     separador.rotation.y = Math.PI/2;
     separador.position.set(15,15,25);
-    this.add(separador);
+   
+    return separador;
   }
 
   crearLavabo(){
@@ -165,26 +125,6 @@ class Banio extends THREE.Object3D {
     var cilindroGrifo1 = new THREE.Mesh(cilindroGrifoGeo1, cilindroMat);
     cilindroGrifo1.rotation.z = Math.PI/2;
     cilindroGrifo1.position.set(0,16,4);
-
-    // var cilindroGrifo2 = new THREE.CylinderGeometry(0.25, 0.25, 1.5, 50);
-    // var grifoExtrusion = new THREE.Shape();
-
-    // grifoExtrusion = cilindroGrifo2.pts;
-
-    // var pts = [];
-    // pts.push(new THREE.Vector3(0,0,0));
-    // pts.push(new THREE.Vector3(0,2,0));
-    // pts.push(new THREE.Vector3(2,2,0));
-
-    // var options = { depth : 8 , steps : 2 , curveSegments : 4, bevelThickness : 4, bevelSize : 2, bevelSegments : 2, extrudepath: pts };
-
-    // var extrusionGeometry = new THREE.ExtrudeGeometry( grifoExtrusion , options );
-    // var extrusionMesh = new THREE.Mesh( extrusionGeometry , cilindroMat ) ;
-
-    // extrusionMesh.rotation.z = Math.PI/2;
-    // extrusionMesh.position.set(0,16,4);
-
-    // grifo.union([cilindroGrifo1, extrusionMesh]);
 
     var cilindroGrifoGeo2 = new THREE.CylinderGeometry(0.25, 0.25, 1, 50);
     var cilindroGrifo2 = new THREE.Mesh(cilindroGrifoGeo2, cilindroMat);

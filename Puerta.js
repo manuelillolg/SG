@@ -9,11 +9,6 @@ class Puerta extends THREE.Object3D {
     this.llave = null;
     this.lock = false;
 
-
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
-    //this.createGUI();
-
     //Animaciones
     this.abrir = this.crearAbrir();
     this.cerrar = this.crearCerrar();

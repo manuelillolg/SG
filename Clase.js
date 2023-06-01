@@ -48,7 +48,7 @@ class Clase extends THREE.Object3D {
     this.add(pizarra);
 
     var caja = new THREE.Box3();
-      caja.setFromObject(pizarra);
+    caja.setFromObject(pizarra);
   
 
     //Puerta

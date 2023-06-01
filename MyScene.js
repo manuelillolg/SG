@@ -3,7 +3,6 @@
 
 import * as THREE from './libs/three.module.js'
 import { GUI } from './libs/dat.gui.module.js'
-import { TrackballControls } from '../libs/TrackballControls.js'
 import { Stats } from './libs/stats.module.js'
 
 // Clases de mi proyecto
@@ -165,15 +164,15 @@ class MyScene extends THREE.Scene {
     // En este caso la intensidad de la luz y si se muestran o no los ejes
     this.guiControls = {
       // En el contexto de una función   this   alude a la función
-      lightIntensity : 0.5,
+      lightIntensity : 0.2,
     }
 
     // Se crea una sección para los controles de esta clase
-    var folder = gui.addFolder ('Luz y Ejes');
+    var folder = gui.addFolder ('Luz');
     
     // Se le añade un control para la intensidad de la luz
     folder.add (this.guiControls, 'lightIntensity', 0, 1, 0.1)
-      .name('Intensidad de la Luz : ')
+      .name('Luz Ambiente : ')
       .onChange ( (value) => this.setLightIntensity (value) );
     
     return gui;
@@ -286,6 +285,7 @@ class MyScene extends THREE.Scene {
     this.personaje.add(this.caja);*/
     
   }
+
   update () {
     
     if (this.stats) this.stats.update();
